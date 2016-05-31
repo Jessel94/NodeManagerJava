@@ -1,2 +1,2 @@
 #!/bin/sh
-sudo docker build -t nodemanager-api .
+sudo docker build -t nodemanager .
