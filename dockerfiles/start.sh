@@ -1,2 +1,2 @@
 #!/bin/sh
-sudo docker run -d -p 8080:8080 --name api -t nodemanager
+sudo docker run -d -p 8080:8080 --name nodemanager -t nodemanager
