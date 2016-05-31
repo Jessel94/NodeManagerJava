@@ -11,20 +11,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-@Path("/docker")
+@Path("/queues")
 public class QueueController {
 
     private QueueRepository queueRepository = new QueueRepository();
 
     @GET
-    @Path("/queues/")
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueues() throws IOException {
         return Response.ok().entity(queueRepository.getAllQueues().toString()).build();
     }
 
     @GET
-    @Path("/queues/{id}/")
+    @Path("/{id}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueueById(@PathParam("id") String id) throws IOException {
         JSONArray jsonArray = queueRepository.getAllQueues();
