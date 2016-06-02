@@ -1,5 +1,6 @@
 package main.java.hro.ictlab.controllers;
 
+import main.java.hro.ictlab.Database.Connector;
 import main.java.hro.ictlab.services.ContainerRepository;
 import org.json.JSONArray;
 import javax.ws.rs.GET;
@@ -14,6 +15,7 @@ import java.io.IOException;
 public class ContainerController {
 
     private ContainerRepository containerRepository = new ContainerRepository();
+    private Connector connector = new Connector();
 
     @GET
     @Path("/")
@@ -26,7 +28,7 @@ public class ContainerController {
     @Path("/{id}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getContainerById(@PathParam("id") String id) throws IOException {
-        JSONArray jsonArray = containerRepository.getAllContainers();
-        return Response.ok().entity(jsonArray.toString()).build();
+        String output = connector.main();
+        return Response.ok().entity(output).build();
     }
 }
