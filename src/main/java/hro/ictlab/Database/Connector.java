@@ -11,7 +11,7 @@ public class Connector {
 
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://145.24.222.223/NodeManager";
+    static final String DB_URL = "jdbc:mysql://145.24.222.223:3306/NodeManager";
 
     //  Database credentials
     static final String USER = "root";
