@@ -1,4 +1,4 @@
-package main.java.hro.ictlab.services;
+package hro.ictlab.nodemanager.services;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

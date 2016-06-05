@@ -1,6 +1,7 @@
-package main.java.hro.ictlab.controllers;
+package hro.ictlab.nodemanager.controllers;
 
-import main.java.hro.ictlab.rabbitmq.Send;
+
+import hro.ictlab.nodemanager.rabbitmq.Send;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

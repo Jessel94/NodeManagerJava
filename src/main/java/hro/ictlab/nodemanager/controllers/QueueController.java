@@ -1,6 +1,6 @@
-package main.java.hro.ictlab.controllers;
+package hro.ictlab.nodemanager.controllers;
 
-import main.java.hro.ictlab.services.QueueRepository;
+import hro.ictlab.nodemanager.services.QueueRepository;
 import org.json.JSONArray;
 
 import javax.ws.rs.GET;

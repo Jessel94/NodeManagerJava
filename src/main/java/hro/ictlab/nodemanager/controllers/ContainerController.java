@@ -1,8 +1,8 @@
-package main.java.hro.ictlab.controllers;
+package hro.ictlab.nodemanager.controllers;
 
-import main.java.hro.ictlab.Database.Connector;
-import main.java.hro.ictlab.services.ContainerRepository;
-import org.json.JSONArray;
+import hro.ictlab.nodemanager.database.Connector;
+import hro.ictlab.nodemanager.services.ContainerRepository;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
