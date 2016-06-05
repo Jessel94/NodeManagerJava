@@ -1,11 +1,10 @@
-package main.java.hro.ictlab.Database;
+package hro.ictlab.nodemanager.database;
 
-import main.java.hro.ictlab.models.Container;
+import com.google.gson.Gson;
+import hro.ictlab.nodemanager.models.Container;
 
 import java.sql.*;
 import java.util.ArrayList;
-
-import com.google.gson.Gson;
 
 public class Connector {
 
@@ -13,7 +12,7 @@ public class Connector {
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://145.24.222.223:3306/NodeManager";
 
-    //  Database credentials
+    //  database credentials
     static final String USER = "root";
     static final String PASS = "100ddJ";
 

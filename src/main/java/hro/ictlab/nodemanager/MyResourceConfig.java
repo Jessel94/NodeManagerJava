@@ -1,7 +1,8 @@
-package main.java.hro.ictlab;
+package hro.ictlab.nodemanager;
+
+import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.ApplicationPath;
-import org.glassfish.jersey.server.ResourceConfig;
 
 @ApplicationPath("api")
 public class MyResourceConfig extends ResourceConfig {

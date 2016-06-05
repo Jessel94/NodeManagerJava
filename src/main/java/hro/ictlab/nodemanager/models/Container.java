@@ -1,4 +1,4 @@
-package main.java.hro.ictlab.models;
+package hro.ictlab.nodemanager.models;
 
 public class Container {
     private int id ;
