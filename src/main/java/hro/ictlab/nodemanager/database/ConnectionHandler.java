@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ContainerConnection {
+public class ConnectionHandler {
 
     private Connector connector = new Connector();
     private GetData getData = new GetData();
