@@ -1,6 +1,7 @@
 package hro.ictlab.nodemanager.database;
 
 import hro.ictlab.nodemanager.models.Container;
+import hro.ictlab.nodemanager.models.Queue;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -19,6 +20,22 @@ class DataFormatter {
             container.setCreationdate(rs.getString("creationdate"));
             container.setState(rs.getString("state"));
             messageData.add(container);
+        }
+        rs.close();
+        return messageData;
+    }
+
+    ArrayList QueueFormatter(ResultSet rs) throws Exception
+    {
+        ArrayList messageData = new ArrayList();
+        while(rs.next())
+        {
+            Queue queue = new Queue();
+            queue.setId(rs.getInt("id"));
+            queue.setHostname(rs.getString("hostname"));
+            queue.setQueuename(rs.getString("queuename"));
+            queue.setQueuepass(rs.getString("queuepass"));
+            messageData.add(queue);
         }
         rs.close();
         return messageData;

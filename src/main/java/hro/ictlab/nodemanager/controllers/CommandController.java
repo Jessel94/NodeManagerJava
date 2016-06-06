@@ -13,20 +13,12 @@ import javax.ws.rs.core.Response;
 @Path("/containers")
 public class CommandController {
 
+    private Send send = new Send();
+
     @GET
     @Path("/{id}/{command}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getContainerById(@PathParam("id") String id, @PathParam("command") String command) throws Exception {
-        String output = Send.main(id, command);
-        String message = null;
-
-        if(output.equals("succes")) {
-            message = new String("Message: " + command + ", has been added to the queue: " + id);
-        }
-        if(output.equals("failed")) {
-            message = new String("Message: " + command + ", has been not been added to the queue: " + id);
-        }
-
-        return Response.ok().entity(message).build();
+        return Response.ok().entity(send.main(id, command)).build();
     }
 }

@@ -2,31 +2,46 @@ package hro.ictlab.nodemanager.rabbitmq;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 
 public class Send {
 
-    public static String main(String queueID, String message) throws Exception {
-        try {
-            ConnectionFactory factory = new ConnectionFactory();
+    private Connector connector = new Connector();
 
-            String envVar = System.getenv("RABBITMQ");
-            if(envVar == null) { envVar = "localhost"; }
-            factory.setHost(envVar);
-
-            Connection connection = factory.newConnection();
-            Channel channel = connection.createChannel();
-
-            channel.queueDeclare(queueID, false, false, false, null);
-            channel.basicPublish("", queueID, null, message.getBytes("UTF-8"));
-
-            channel.close();
-            connection.close();
-
-            return new String("succes");
+    public String main(String containerID, String message){
+        Connection conn = null;
+        Channel channel = null;
+        String result = "no data";
+        try{
+            conn = connector.GetConnection();
+            channel = connector.GetChannel(conn);
+            if(message.equals("Start") || message.equals("Stop")){
+                result = StartStop(containerID, message, channel);
+            }
         }
         catch (Exception e){
-            return new String("failed");
+            result = "failed";
+            return result;
         }
+        finally {
+            try{
+                connector.CloseChannel(channel);
+                connector.CloseConnection(conn);
+            }
+            catch (Exception e){
+                result = "failed";
+                return result;
+            }
+        }
+        return result;
+    }
+
+    private String StartStop (String containerID, String message, Channel channel) throws Exception {
+
+        //temporary solution
+        String queueID = containerID;
+
+        channel.queueDeclare(queueID, false, false, false, null);
+        channel.basicPublish("", queueID, null, message.getBytes("UTF-8"));
+        return "succes";
     }
 }

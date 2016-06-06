@@ -38,4 +38,52 @@ public class ConnectionHandler {
         }
         return message;
     }
+
+    public String QueueRequest(String id) throws Exception {
+        Connection conn = null;
+        String message = "No Data";
+        try {
+            conn = connector.GetConnection();
+            ResultSet rs = getData.GetQueues(conn, id);
+            ArrayList messageData = dataFormatter.QueueFormatter(rs);
+            Gson gson = new Gson();
+            message = gson.toJson(messageData).toString();
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            try{
+                connector.CloseConnection(conn);
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        return message;
+    }
+
+    public ArrayList QueueData(String id) throws Exception {
+        Connection conn = null;
+        ArrayList messageData = new ArrayList();
+        try {
+            conn = connector.GetConnection();
+            ResultSet rs = getData.GetQueues(conn, id);
+            messageData = dataFormatter.ContainerFormatter(rs);
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            try{
+                connector.CloseConnection(conn);
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        return messageData;
+    }
 }
