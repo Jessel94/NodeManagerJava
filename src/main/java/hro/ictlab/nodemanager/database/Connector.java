@@ -19,8 +19,7 @@ class Connector {
         Class.forName(JDBC_DRIVER);
 
         //STEP 2: Open a connection
-        Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        return conn;
+        return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
     void CloseConnection(Connection conn) throws Exception{

@@ -1,5 +1,6 @@
 package hro.ictlab.nodemanager.database;
 
+import com.google.gson.Gson;
 import hro.ictlab.nodemanager.models.Container;
 import hro.ictlab.nodemanager.models.Queue;
 
@@ -7,6 +8,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 class DataFormatter {
+
+    private Gson gson = new Gson();
 
     ArrayList ContainerFormatter(ResultSet rs) throws Exception
     {
@@ -39,5 +42,9 @@ class DataFormatter {
         }
         rs.close();
         return messageData;
+    }
+
+    String GSONFormatter(ArrayList arrayList) {
+        return gson.toJson(arrayList).toString();
     }
 }

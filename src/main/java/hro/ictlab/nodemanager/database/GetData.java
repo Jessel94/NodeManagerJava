@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 
 class GetData {
 
-    ResultSet GetContainers(Connection connection, String containerID) throws Exception
+    PreparedStatement GetContainers(Connection connection, String containerID) throws Exception
     {
         PreparedStatement ps;
         if(containerID == null){
@@ -15,10 +15,10 @@ class GetData {
         else{
             ps = connection.prepareStatement("SELECT id, name, creationdate, state, queueid FROM Containers WHERE id = " + containerID);
         }
-        return  GetResultSet(ps);
+        return ps;
     }
 
-    ResultSet GetQueues(Connection connection, String containerID) throws Exception
+    PreparedStatement GetQueues(Connection connection, String containerID) throws Exception
     {
         PreparedStatement ps;
         if(containerID == null){
@@ -27,10 +27,10 @@ class GetData {
         else{
             ps = connection.prepareStatement("SELECT id, hostname, queuename, queuepass FROM Queues WHERE id = " + containerID);
         }
-        return  GetResultSet(ps);
+        return ps;
     }
 
-    private ResultSet GetResultSet(PreparedStatement ps) throws Exception
+    ResultSet GetResultSet(PreparedStatement ps) throws Exception
     {
         return ps.executeQuery();
     }

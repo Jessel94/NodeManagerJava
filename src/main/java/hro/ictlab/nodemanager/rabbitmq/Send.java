@@ -2,11 +2,13 @@ package hro.ictlab.nodemanager.rabbitmq;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import hro.ictlab.nodemanager.database.ConnectionHandler;
 
 public class Send {
 
     private Connector connector = new Connector();
     private MessageBuilder messageBuilder = new MessageBuilder();
+    private ConnectionHandler connectionHandler = new ConnectionHandler();
 
     public String main(String containerID, String message) throws Exception {
         Connection conn = null;
@@ -15,8 +17,17 @@ public class Send {
         try{
             conn = connector.GetConnection();
             channel = connector.GetChannel(conn);
-            if (message.equals("start") || message.equals("stop")) {
-                result = StartStop(containerID, message, channel);
+            if (message.equals("start") || message.equals("stop") || message.equals("restart")) {
+                result = StartStopRestart(containerID, message, channel);
+                if (message.equals("start")) {
+                    connectionHandler.UpdateContainer(containerID, "Started");
+                }
+                if (message.equals("stop")) {
+                    connectionHandler.UpdateContainer(containerID, "Stopping");
+                }
+                if (message.equals("restart")) {
+                    connectionHandler.UpdateContainer(containerID, "Restarting");
+                }
             }
         }
         catch (Exception e){
@@ -34,7 +45,7 @@ public class Send {
         return result;
     }
 
-    private String StartStop (String containerID, String message, Channel channel) throws Exception {
+    private String StartStopRestart(String containerID, String message, Channel channel) throws Exception {
 
         //temporary solution to get queueID
         String queueID = containerID;

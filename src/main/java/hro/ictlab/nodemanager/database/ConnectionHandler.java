@@ -1,16 +1,13 @@
 package hro.ictlab.nodemanager.database;
 
-import com.google.gson.Gson;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class ConnectionHandler {
 
     private Connector connector = new Connector();
     private GetData getData = new GetData();
+    private UpdateData updateData = new UpdateData();
     private DataFormatter dataFormatter = new DataFormatter();
 
 
@@ -19,10 +16,10 @@ public class ConnectionHandler {
         String message = "No Data";
         try {
             conn = connector.GetConnection();
-            ResultSet rs = getData.GetContainers(conn, id);
+            PreparedStatement ps = getData.GetQueues(conn, id);
+            ResultSet rs = getData.GetResultSet(ps);
             ArrayList messageData = dataFormatter.ContainerFormatter(rs);
-            Gson gson = new Gson();
-            message = gson.toJson(messageData).toString();
+            message = dataFormatter.GSONFormatter(messageData);
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -44,10 +41,10 @@ public class ConnectionHandler {
         String message = "No Data";
         try {
             conn = connector.GetConnection();
-            ResultSet rs = getData.GetQueues(conn, id);
+            PreparedStatement ps = getData.GetQueues(conn, id);
+            ResultSet rs = getData.GetResultSet(ps);
             ArrayList messageData = dataFormatter.QueueFormatter(rs);
-            Gson gson = new Gson();
-            message = gson.toJson(messageData).toString();
+            message = dataFormatter.GSONFormatter(messageData);
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -69,7 +66,8 @@ public class ConnectionHandler {
         ArrayList messageData = new ArrayList();
         try {
             conn = connector.GetConnection();
-            ResultSet rs = getData.GetQueues(conn, id);
+            PreparedStatement ps = getData.GetQueues(conn, id);
+            ResultSet rs = getData.GetResultSet(ps);
             messageData = dataFormatter.ContainerFormatter(rs);
         } catch (SQLException se) {
             //Handle errors for JDBC
@@ -85,5 +83,27 @@ public class ConnectionHandler {
             }
         }
         return messageData;
+    }
+
+    public void UpdateContainer(String id, String newStatus) throws Exception {
+        Connection conn = null;
+        try {
+            conn = connector.GetConnection();
+            Statement statement = updateData.GetStatement(conn);
+            String sql = updateData.ContainerStatus(id, newStatus);
+            updateData.ExecuteUpdate(statement, sql);
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            try {
+                connector.CloseConnection(conn);
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
     }
 }
