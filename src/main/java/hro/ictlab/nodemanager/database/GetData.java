@@ -22,10 +22,10 @@ class GetData {
     {
         PreparedStatement ps;
         if(containerID == null){
-            ps = connection.prepareStatement("SELECT id, name, creationdate, state, queueid FROM Queues");
+            ps = connection.prepareStatement("SELECT id, hostname, queuename, queuepass FROM Queues");
         }
         else{
-            ps = connection.prepareStatement("SELECT id, name, creationdate, state, queueid FROM Queues WHERE id = " + containerID);
+            ps = connection.prepareStatement("SELECT id, hostname, queuename, queuepass FROM Queues WHERE id = " + containerID);
         }
         return  GetResultSet(ps);
     }

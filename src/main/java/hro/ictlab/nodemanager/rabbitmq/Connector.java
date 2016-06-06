@@ -8,15 +8,17 @@ class Connector {
 
     Connection GetConnection () throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
-        String envVar = System.getenv("RABBITMQ");
-        if(envVar == null) { envVar = "localhost"; }
-        factory.setHost(envVar);
+        factory.setHost(System.getenv("RABBITMQ"));
+        factory.setUsername(System.getenv("RABBITMQ_USER"));
+        factory.setPassword(System.getenv("RABBITMQ_PASS"));
 
         return factory.newConnection();
     }
 
     void CloseConnection (Connection connection) throws Exception {
-        connection.close();
+        if (connection != null) {
+            connection.close();
+        }
     }
 
     Channel GetChannel (Connection connection) throws Exception {
@@ -24,6 +26,8 @@ class Connector {
     }
 
     void CloseChannel (Channel channel) throws Exception {
-        channel.close();
+        if (channel != null) {
+            channel.close();
+        }
     }
 }
