@@ -11,17 +11,17 @@ class DataFormatter {
 
     private Gson gson = new Gson();
 
-    ArrayList ContainerFormatter(ResultSet rs) throws Exception {
+    ArrayList containerFormatter(ResultSet rs) throws Exception {
         ArrayList messageData = new ArrayList();
         while (rs.next()) {
-            Container container = FillContainer(rs);
+            Container container = fillContainer(rs);
             messageData.add(container);
         }
         rs.close();
         return messageData;
     }
 
-    private Container FillContainer(ResultSet rs) throws Exception {
+    private Container fillContainer(ResultSet rs) throws Exception {
         Container container = new Container();
         container.setId(rs.getInt("id"));
         container.setQueueid(rs.getInt("queueid"));
@@ -31,9 +31,9 @@ class DataFormatter {
         return container;
     }
 
-    Container ContainerData(ResultSet rs) throws Exception {
+    Container containerData(ResultSet rs) throws Exception {
         if (rs.next()) {
-            Container container = FillContainer(rs);
+            Container container = fillContainer(rs);
             rs.close();
             return container;
         } else {
@@ -41,17 +41,17 @@ class DataFormatter {
         }
     }
 
-    ArrayList QueueFormatter(ResultSet rs) throws Exception {
+    ArrayList queueFormatter(ResultSet rs) throws Exception {
         ArrayList messageData = new ArrayList();
         while (rs.next()) {
-            Queue queue = FillQueue(rs);
+            Queue queue = fillQueue(rs);
             messageData.add(queue);
         }
         rs.close();
         return messageData;
     }
 
-    private Queue FillQueue(ResultSet rs) throws Exception {
+    private Queue fillQueue(ResultSet rs) throws Exception {
         Queue queue = new Queue();
         queue.setId(rs.getInt("id"));
         queue.setHostname(rs.getString("hostname"));
@@ -60,7 +60,7 @@ class DataFormatter {
         return queue;
     }
 
-    Queue QueueData(ResultSet rs) throws Exception {
+    Queue queueData(ResultSet rs) throws Exception {
         if (rs.next()) {
             Queue queue = new Queue();
             queue.setId(rs.getInt(1));
@@ -71,7 +71,7 @@ class DataFormatter {
         }
     }
 
-    String GSONFormatter(ArrayList arrayList) {
+    String gsonFormatter(ArrayList arrayList) {
         return gson.toJson(arrayList).toString();
     }
 }

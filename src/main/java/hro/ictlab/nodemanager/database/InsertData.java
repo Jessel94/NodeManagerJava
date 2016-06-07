@@ -7,15 +7,18 @@ import java.sql.Statement;
 
 class InsertData {
 
-    PreparedStatement NewQueue(Connection connection) throws Exception {
+    PreparedStatement newQueue(Connection connection, String hostName, String userName, String passWord) throws Exception {
         PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO Queues (id, hostname, queuename, queuepass)" +
-                        " VALUES (NULL, '" + System.getenv("RABBITMQ") + "', '" + System.getenv("RABBITMQ_USER") + "', '" + System.getenv("RABBITMQ_PASS") + "')", Statement.RETURN_GENERATED_KEYS
+                        " VALUES (NULL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS
         );
+        ps.setString(1, hostName);
+        ps.setString(2, userName);
+        ps.setString(3, passWord);
         return ps;
     }
 
-    ResultSet GetResultSet(PreparedStatement ps) throws Exception {
+    ResultSet getResultSet(PreparedStatement ps) throws Exception {
         ps.execute();
         return ps.getGeneratedKeys();
     }

@@ -6,7 +6,7 @@ class Send {
 
     private MessageBuilder messageBuilder = new MessageBuilder();
 
-    String StartStopRestart(String containerID, String queueID, String message, Channel channel) throws Exception {
+    String startStopRestart(String containerID, String queueID, String message, Channel channel) throws Exception {
 
         String messageArray = messageBuilder.main(containerID, message, null, null);
 

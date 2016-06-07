@@ -9,35 +9,36 @@ public class RabbitmqHandler {
     private Connector connector = new Connector();
     private Send send = new Send();
     private Queue queue = new Queue();
+    private Generator generator = new Generator();
     private DatabaseHandler databaseHandler = new DatabaseHandler();
     private MessageBuilder messageBuilder = new MessageBuilder();
 
-    public String ProcessCommand(String containerID, String message) throws Exception {
+    public String processCommand(String containerID, String message) throws Exception {
         Connection conn = null;
         Channel channel = null;
         String result = "no data";
         try {
-            conn = connector.GetConnection();
-            channel = connector.GetChannel(conn);
+            conn = connector.getConnection();
+            channel = connector.getChannel(conn);
             if (message.equals("start") || message.equals("stop") || message.equals("restart")) {
-                String queueId = databaseHandler.ContainerData(containerID);
-                result = send.StartStopRestart(containerID, queueId, message, channel);
+                String queueId = databaseHandler.containerQueueID(containerID);
+                result = send.startStopRestart(containerID, queueId, message, channel);
                 if (message.equals("start")) {
-                    databaseHandler.UpdateContainer(containerID, "Started");
+                    databaseHandler.updateContainer(containerID, "Started");
                 }
                 if (message.equals("stop")) {
-                    databaseHandler.UpdateContainer(containerID, "Stopping");
+                    databaseHandler.updateContainer(containerID, "Stopping");
                 }
                 if (message.equals("restart")) {
-                    databaseHandler.UpdateContainer(containerID, "Restarting");
+                    databaseHandler.updateContainer(containerID, "Restarting");
                 }
             }
         } catch (Exception e) {
             throw e;
         } finally {
             try {
-                connector.CloseChannel(channel);
-                connector.CloseConnection(conn);
+                connector.closeChannel(channel);
+                connector.closeConnection(conn);
             } catch (Exception e) {
                 throw e;
             }
@@ -45,24 +46,25 @@ public class RabbitmqHandler {
         return result;
     }
 
-    public String RequestQueue() throws Exception {
+    public String requestQueue() throws Exception {
         Connection conn = null;
         Channel channel = null;
         String result = "no data";
         try {
-            conn = connector.GetConnection();
-            channel = connector.GetChannel(conn);
-            int queueID = databaseHandler.NewQueue();
-            result = queue.NewQueue(channel, queueID);
-            String userName = "test";
-            String passWord = "test";
+            conn = connector.getConnection();
+            channel = connector.getChannel(conn);
+            String hostName = System.getenv("RABBITMQ");
+            String userName = generator.generateUser();
+            String passWord = generator.generatePass();
+            int queueID = databaseHandler.newQueue(hostName, userName, passWord);
+            result = queue.newQueue(channel, queueID);
             result = messageBuilder.main(result, "setid", userName, passWord);
         } catch (Exception e) {
             throw e;
         } finally {
             try {
-                connector.CloseChannel(channel);
-                connector.CloseConnection(conn);
+                connector.closeChannel(channel);
+                connector.closeConnection(conn);
             } catch (Exception e) {
                 throw e;
             }

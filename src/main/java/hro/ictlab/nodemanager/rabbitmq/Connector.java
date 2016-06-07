@@ -6,7 +6,7 @@ import com.rabbitmq.client.ConnectionFactory;
 
 class Connector {
 
-    Connection GetConnection() throws Exception {
+    Connection getConnection() throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(System.getenv("RABBITMQ"));
         factory.setVirtualHost(System.getenv("RABBITMQ_VIRTUAL"));
@@ -17,17 +17,17 @@ class Connector {
         return factory.newConnection();
     }
 
-    void CloseConnection(Connection connection) throws Exception {
+    void closeConnection(Connection connection) throws Exception {
         if (connection != null) {
             connection.close();
         }
     }
 
-    Channel GetChannel(Connection connection) throws Exception {
+    Channel getChannel(Connection connection) throws Exception {
         return connection.createChannel();
     }
 
-    void CloseChannel(Channel channel) throws Exception {
+    void closeChannel(Channel channel) throws Exception {
         if (channel != null) {
             channel.close();
         }

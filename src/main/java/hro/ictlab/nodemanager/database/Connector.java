@@ -14,7 +14,7 @@ class Connector {
     private static final String PASS = System.getenv("MYSQL_PASS");
 
 
-    Connection GetConnection() throws Exception {
+    Connection getConnection() throws Exception {
         //STEP 1: Register JDBC driver
         Class.forName(JDBC_DRIVER);
 
@@ -22,7 +22,7 @@ class Connector {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    void CloseConnection(Connection conn) throws Exception {
+    void closeConnection(Connection conn) throws Exception {
         //finally block used to close resources
         if (conn != null) {
             conn.close();

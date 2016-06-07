@@ -20,7 +20,7 @@ public class CommandController {
     public Response issueCommand(@PathParam("id") String id, @PathParam("command") String command) throws Exception {
         if (id != null & id != "null") {
             if (command != null & command != "null") {
-                return Response.ok().entity(rabbitmqHandler.ProcessCommand(id, command)).build();
+                return Response.ok().entity(rabbitmqHandler.processCommand(id, command)).build();
             }
         }
         return Response.noContent().build();

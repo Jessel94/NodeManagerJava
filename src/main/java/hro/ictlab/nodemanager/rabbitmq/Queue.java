@@ -4,7 +4,7 @@ import com.rabbitmq.client.Channel;
 
 class Queue {
 
-    String NewQueue(Channel channel, int queue) throws Exception {
+    String newQueue(Channel channel, int queue) throws Exception {
         String queueID = Integer.toString(queue);
         channel.queueDeclare(queueID, true, false, false, null);
         return queueID;

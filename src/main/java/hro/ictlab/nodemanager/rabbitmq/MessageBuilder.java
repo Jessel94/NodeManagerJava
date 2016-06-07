@@ -8,13 +8,13 @@ class MessageBuilder {
     String main(String iD, String message, String userName, String passWord) {
         JSONArray mainObjArray = new JSONArray();
         if (message.equals("start")) {
-            mainObjArray = actionContainer(Start(iD));
+            mainObjArray = actionContainer(start(iD));
         }
         if (message.equals("stop")) {
-            mainObjArray = actionContainer(Stop(iD));
+            mainObjArray = actionContainer(stop(iD));
         }
         if (message.equals("restart")) {
-            mainObjArray = actionContainer(Restart(iD));
+            mainObjArray = actionContainer(restart(iD));
         }
         if (message.equals("setid")) {
             mainObjArray.put(actionId(iD));
@@ -24,7 +24,7 @@ class MessageBuilder {
         return mainObjArray.toString();
     }
 
-    private JSONObject Start(String containerID) {
+    private JSONObject start(String containerID) {
         JSONObject jo1 = new JSONObject();
         jo1.put("container", containerID);
 
@@ -34,7 +34,7 @@ class MessageBuilder {
         return jo2;
     }
 
-    private JSONObject Stop(String containerID) {
+    private JSONObject stop(String containerID) {
         JSONObject jo1 = new JSONObject();
         jo1.put("container", containerID);
         jo1.put("time", "60");
@@ -45,7 +45,7 @@ class MessageBuilder {
         return jo2;
     }
 
-    private JSONObject Restart(String containerID) {
+    private JSONObject restart(String containerID) {
         JSONObject jo1 = new JSONObject();
         jo1.put("container", containerID);
         jo1.put("time", "60");

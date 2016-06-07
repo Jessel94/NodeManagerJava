@@ -1,6 +1,5 @@
 package hro.ictlab.nodemanager.controllers;
 
-
 import hro.ictlab.nodemanager.rabbitmq.RabbitmqHandler;
 
 import javax.ws.rs.GET;
@@ -18,6 +17,6 @@ public class RequestController {
     @Path("/queue/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response requestQueue() throws Exception {
-        return Response.ok().entity(rabbitmqHandler.RequestQueue()).build();
+        return Response.ok().entity(rabbitmqHandler.requestQueue()).build();
     }
 }

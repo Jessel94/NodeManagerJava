@@ -18,7 +18,7 @@ public class QueueController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueues() throws Exception {
-        String output = databaseHandler.QueueRequest(null);
+        String output = databaseHandler.queueRequest(null);
         return Response.ok().entity(output).build();
     }
 
@@ -26,7 +26,7 @@ public class QueueController {
     @Path("/{id}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueueById(@PathParam("id") String id) throws Exception {
-        String output = databaseHandler.QueueRequest(id);
+        String output = databaseHandler.queueRequest(id);
         return Response.ok().entity(output).build();
     }
 }

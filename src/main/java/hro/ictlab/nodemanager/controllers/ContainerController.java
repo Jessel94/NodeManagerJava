@@ -16,7 +16,15 @@ public class ContainerController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getContainers() throws Exception {
-        String output = databaseHandler.ContainerRequest(null);
+        String output = databaseHandler.containerRequest(null);
+        return Response.ok().entity(output).build();
+    }
+
+    @GET
+    @Path("/{id}/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getContainerById(@PathParam("id") String id) throws Exception {
+        String output = databaseHandler.containerRequest(id);
         return Response.ok().entity(output).build();
     }
 
@@ -24,13 +32,5 @@ public class ContainerController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newContainer(@Context HttpServletRequest request) throws Exception {
         return Response.ok().build();
-    }
-
-    @GET
-    @Path("/{id}/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getContainerById(@PathParam("id") String id) throws Exception {
-        String output = databaseHandler.ContainerRequest(id);
-        return Response.ok().entity(output).build();
     }
 }
