@@ -31,6 +31,7 @@ public class RabbitMQ {
             putPermissions.setEntity(new StringEntity("{\"configure\":\"^$\",\"write\":\".*\",\"read\":\".*\"}")); // Permission you wanna. Check RabbitMQ HTTP API for details
             client.execute(putPermissions);
 
+            client.close();
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
