@@ -8,7 +8,9 @@ public class RabbitmqHandler {
 
     private Connector connector = new Connector();
     private Send send = new Send();
+    private Queue queue = new Queue();
     private DatabaseHandler databaseHandler = new DatabaseHandler();
+    private MessageBuilder messageBuilder = new MessageBuilder();
 
     public String ProcessCommand(String containerID, String message) throws Exception {
         Connection conn = null;
@@ -18,7 +20,8 @@ public class RabbitmqHandler {
             conn = connector.GetConnection();
             channel = connector.GetChannel(conn);
             if (message.equals("start") || message.equals("stop") || message.equals("restart")) {
-                result = send.StartStopRestart(containerID, message, channel);
+                String queueId = databaseHandler.ContainerData(containerID);
+                result = send.StartStopRestart(containerID, queueId, message, channel);
                 if (message.equals("start")) {
                     databaseHandler.UpdateContainer(containerID, "Started");
                 }
@@ -52,8 +55,11 @@ public class RabbitmqHandler {
         try{
             conn = connector.GetConnection();
             channel = connector.GetChannel(conn);
-            int test = databaseHandler.NewQueue();
-            result = String.valueOf(test);
+            int queueID = databaseHandler.NewQueue();
+            result = queue.NewQueue(channel, queueID);
+            String userName = "test";
+            String passWord = "test";
+            result = messageBuilder.main(result, "setid", userName, passWord);
         }
         catch (Exception e){
             throw e;

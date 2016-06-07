@@ -1,6 +1,5 @@
 package hro.ictlab.nodemanager.controllers;
 
-
 import hro.ictlab.nodemanager.rabbitmq.RabbitmqHandler;
 
 import javax.ws.rs.GET;
@@ -25,12 +24,5 @@ public class CommandController {
             }
         }
         return Response.noContent().build();
-    }
-
-    @GET
-    @Path("/requestqueue/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response requestQueue() throws Exception {
-        return Response.ok().entity(rabbitmqHandler.RequestQueue()).build();
     }
 }

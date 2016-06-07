@@ -5,24 +5,21 @@ import org.json.JSONObject;
 
 class MessageBuilder {
 
-    String main(String ContainerID, String message) {
-        JSONObject jo = new JSONObject();
+    String main(String iD, String message, String userName, String passWord) {
+        JSONArray mainObjArray = new JSONArray();
         if (message.equals("start")) {
-            jo = Start(ContainerID);
+            mainObjArray = actionContainer(Start(iD));
         }
         if (message.equals("stop")) {
-            jo = Stop(ContainerID);
+            mainObjArray = actionContainer(Stop(iD));
         }
         if (message.equals("restart")) {
-            jo = Restart(ContainerID);
+            mainObjArray = actionContainer(Restart(iD));
         }
-
-        JSONObject mainObj = new JSONObject();
-        mainObj.put("action", "container");
-        mainObj.put("docker", jo);
-
-        JSONArray mainObjArray = new JSONArray();
-        mainObjArray.put(mainObj);
+        if (message.equals("setid")) {
+            mainObjArray.put(actionId(iD));
+            mainObjArray.put(actionConnect(rabbitMQ(iD, userName, passWord)));
+        }
 
         return mainObjArray.toString();
     }
@@ -58,4 +55,44 @@ class MessageBuilder {
 
         return jo2;
     }
+
+    private JSONArray actionContainer(JSONObject jo) {
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("action", "container");
+        mainObj.put("docker", jo);
+
+        JSONArray mainObjArray = new JSONArray();
+        mainObjArray.put(mainObj);
+
+        return mainObjArray;
+    }
+
+    private JSONObject actionId(String queueId) {
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("action", "set-id");
+        mainObj.put("id", queueId);
+
+        return mainObj;
+    }
+
+    private JSONObject actionConnect(JSONObject jo) {
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("amqp", jo);
+        mainObj.put("action", "connect");
+
+        return mainObj;
+    }
+
+    private JSONObject rabbitMQ(String queueId, String userName, String passWord) {
+        JSONObject jo = new JSONObject();
+        jo.put("host", System.getenv("RABBITMQ"));
+        jo.put("virtualhost", System.getenv("RABBITMQ_VIRTUAL"));
+        jo.put("port", System.getenv("RABBITMQ_PORT"));
+        jo.put("username", userName);
+        jo.put("password", passWord);
+        jo.put("queue", queueId);
+
+        return jo;
+    }
+
 }

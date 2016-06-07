@@ -1,5 +1,8 @@
 package hro.ictlab.nodemanager.database;
 
+import hro.ictlab.nodemanager.models.Container;
+import hro.ictlab.nodemanager.models.Queue;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -35,6 +38,31 @@ public class DatabaseHandler {
             }
         }
         return message;
+    }
+
+    public String ContainerData(String id) throws Exception {
+        Connection conn = null;
+        String messageData = null;
+        try {
+            conn = connector.GetConnection();
+            PreparedStatement ps = getData.GetContainers(conn, id);
+            ResultSet rs = getData.GetResultSet(ps);
+            Container container = dataFormatter.ContainerData(rs);
+            messageData = Integer.toString(container.getQueueid());
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            try{
+                connector.CloseConnection(conn);
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        return messageData;
     }
 
     public String QueueRequest(String id) throws Exception {
@@ -113,9 +141,10 @@ public class DatabaseHandler {
         int queueID = 0;
         try {
             conn = connector.GetConnection();
-            PreparedStatement ps = insertData.NewQueue2(conn);
-            ps.execute();
-            queueID = 1;
+            PreparedStatement ps = insertData.NewQueue(conn);
+            ResultSet rs = insertData.GetResultSet(ps);
+            Queue queue = dataFormatter.QueueData(rs);
+            queueID = queue.getId();
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();

@@ -6,15 +6,11 @@ class Send {
 
     private MessageBuilder messageBuilder = new MessageBuilder();
 
-    String StartStopRestart(String containerID, String message, Channel channel) throws Exception {
+    String StartStopRestart(String containerID, String queueID, String message, Channel channel) throws Exception {
 
-        //temporary solution to get queueID
-        String queueID = containerID;
+        String messageArray = messageBuilder.main(containerID, message, null, null);
 
-        //temporary solution to get message body
-        String messageArray = messageBuilder.main(containerID, message);
-
-        channel.queueDeclare(queueID, false, false, false, null);
+        channel.queueDeclare(queueID, true, false, false, null);
         channel.basicPublish("", queueID, null, messageArray.getBytes("UTF-8"));
         return "succes";
     }
