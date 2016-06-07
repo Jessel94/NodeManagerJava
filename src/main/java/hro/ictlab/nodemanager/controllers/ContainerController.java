@@ -8,7 +8,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/containers")
+@Path("/containers/")
 public class ContainerController {
 
     private DatabaseHandler databaseHandler = new DatabaseHandler();
@@ -21,7 +21,7 @@ public class ContainerController {
     }
 
     @GET
-    @Path("/{id}/")
+    @Path("{id}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getContainerById(@PathParam("id") String id) throws Exception {
         String output = databaseHandler.containerRequest(id);
@@ -31,6 +31,6 @@ public class ContainerController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newContainer(@Context HttpServletRequest request) throws Exception {
-        return Response.ok().build();
+        return Response.ok("I Received Something").build();
     }
 }
