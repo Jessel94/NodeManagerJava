@@ -7,13 +7,13 @@ import hro.ictlab.nodemanager.services.RabbitMQ;
 
 public class RabbitmqHandler {
 
-    private Connector connector = new Connector();
-    private Send send = new Send();
-    private Queue queue = new Queue();
-    private Generator generator = new Generator();
-    private DatabaseHandler databaseHandler = new DatabaseHandler();
-    private MessageBuilder messageBuilder = new MessageBuilder();
-    private RabbitMQ rabbitMQ = new RabbitMQ();
+    private final Connector connector = new Connector();
+    private final Send send = new Send();
+    private final Queue queue = new Queue();
+    private final Generator generator = new Generator();
+    private final DatabaseHandler databaseHandler = new DatabaseHandler();
+    private final MessageBuilder messageBuilder = new MessageBuilder();
+    private final RabbitMQ rabbitMQ = new RabbitMQ();
 
     public String processCommand(String containerID, String message) throws Exception {
         Connection conn = null;
@@ -63,13 +63,13 @@ public class RabbitmqHandler {
             result = queue.newQueue(channel, queueID);
             result = messageBuilder.main(result, "setid", userName, passWord);
         } catch (Exception e) {
-            result = e.toString();
+            throw e;
         } finally {
             try {
                 connector.closeChannel(channel);
                 connector.closeConnection(conn);
             } catch (Exception e) {
-                result = e.toString();
+                throw e;
             }
         }
         return result;

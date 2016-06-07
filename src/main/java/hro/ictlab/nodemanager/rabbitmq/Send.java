@@ -4,7 +4,7 @@ import com.rabbitmq.client.Channel;
 
 class Send {
 
-    private MessageBuilder messageBuilder = new MessageBuilder();
+    private final MessageBuilder messageBuilder = new MessageBuilder();
 
     String startStopRestart(String containerID, String queueID, String message, Channel channel) throws Exception {
 

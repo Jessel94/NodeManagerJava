@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 public class DatabaseHandler {
 
-    private Connector connector = new Connector();
-    private GetData getData = new GetData();
-    private UpdateData updateData = new UpdateData();
-    private DataFormatter dataFormatter = new DataFormatter();
-    private InsertData insertData = new InsertData();
+    private final Connector connector = new Connector();
+    private final GetData getData = new GetData();
+    private final UpdateData updateData = new UpdateData();
+    private final DataFormatter dataFormatter = new DataFormatter();
+    private final InsertData insertData = new InsertData();
 
 
     public String containerRequest(String id) throws Exception {

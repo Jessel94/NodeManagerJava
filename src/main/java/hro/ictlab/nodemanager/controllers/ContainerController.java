@@ -12,8 +12,8 @@ import javax.ws.rs.core.Response;
 @Path("/containers/")
 public class ContainerController {
 
-    private DatabaseHandler databaseHandler = new DatabaseHandler();
-    private RabbitmqHandler rabbitmqHandler = new RabbitmqHandler();
+    private final DatabaseHandler databaseHandler = new DatabaseHandler();
+    private final RabbitmqHandler rabbitmqHandler = new RabbitmqHandler();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

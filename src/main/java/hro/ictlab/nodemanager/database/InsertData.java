@@ -34,7 +34,7 @@ class InsertData {
     }
 
     ResultSet getResultSet(PreparedStatement ps) throws Exception {
-        executeStatement(ps);
+        ps = executeStatement(ps);
         return ps.getGeneratedKeys();
     }
 }

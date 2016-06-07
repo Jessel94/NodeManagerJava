@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 class DataFormatter {
 
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
-    ArrayList containerFormatter(ResultSet rs) throws Exception {
-        ArrayList messageData = new ArrayList();
+    ArrayList<Container> containerFormatter(ResultSet rs) throws Exception {
+        ArrayList<Container> messageData = new ArrayList<>();
         while (rs.next()) {
             Container container = fillContainer(rs);
             messageData.add(container);
@@ -42,8 +42,8 @@ class DataFormatter {
         }
     }
 
-    ArrayList queueFormatter(ResultSet rs) throws Exception {
-        ArrayList messageData = new ArrayList();
+    ArrayList<Queue> queueFormatter(ResultSet rs) throws Exception {
+        ArrayList<Queue> messageData = new ArrayList<>();
         while (rs.next()) {
             Queue queue = fillQueue(rs);
             messageData.add(queue);
@@ -72,8 +72,8 @@ class DataFormatter {
         }
     }
 
-    ArrayList nodeFormatter(ResultSet rs) throws Exception {
-        ArrayList messageData = new ArrayList();
+    ArrayList<Node> nodeFormatter(ResultSet rs) throws Exception {
+        ArrayList<Node> messageData = new ArrayList<>();
         while (rs.next()) {
             Node node = fillNode(rs);
             messageData.add(node);
@@ -92,6 +92,6 @@ class DataFormatter {
     }
 
     String gsonFormatter(ArrayList arrayList) {
-        return gson.toJson(arrayList).toString();
+        return gson.toJson(arrayList);
     }
 }

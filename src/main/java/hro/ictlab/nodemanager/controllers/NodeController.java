@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 @Path("/nodes/")
 public class NodeController {
 
-    private DatabaseHandler databaseHandler = new DatabaseHandler();
+    private final DatabaseHandler databaseHandler = new DatabaseHandler();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

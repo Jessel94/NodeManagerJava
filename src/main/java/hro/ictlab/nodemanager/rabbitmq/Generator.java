@@ -5,9 +5,9 @@ import java.security.SecureRandom;
 
 class Generator {
 
-    private SecureRandom random = new SecureRandom();
+    private final SecureRandom random = new SecureRandom();
 
-    public String nextSessionId() {
+    private String nextSessionId() {
         return new BigInteger(130, random).toString(28);
     }
 
