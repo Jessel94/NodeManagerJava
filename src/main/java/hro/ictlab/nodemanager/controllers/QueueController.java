@@ -1,6 +1,7 @@
 package hro.ictlab.nodemanager.controllers;
 
 import hro.ictlab.nodemanager.database.DatabaseHandler;
+import hro.ictlab.nodemanager.rabbitmq.RabbitmqHandler;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 public class QueueController {
 
     private DatabaseHandler databaseHandler = new DatabaseHandler();
+    private RabbitmqHandler rabbitmqHandler = new RabbitmqHandler();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -27,5 +29,12 @@ public class QueueController {
     public Response getQueueById(@PathParam("id") String id) throws Exception {
         String output = databaseHandler.queueRequest(id);
         return Response.ok().entity(output).build();
+    }
+
+    @GET
+    @Path("request/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response requestQueue() throws Exception {
+        return Response.ok().entity(rabbitmqHandler.requestQueue()).build();
     }
 }
