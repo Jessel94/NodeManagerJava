@@ -3,12 +3,13 @@ package hro.ictlab.nodemanager.database;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ConnectionHandler {
+public class DatabaseHandler {
 
     private Connector connector = new Connector();
     private GetData getData = new GetData();
     private UpdateData updateData = new UpdateData();
     private DataFormatter dataFormatter = new DataFormatter();
+    private InsertData insertData = new InsertData();
 
 
     public String ContainerRequest(String id) throws Exception {
@@ -16,7 +17,7 @@ public class ConnectionHandler {
         String message = "No Data";
         try {
             conn = connector.GetConnection();
-            PreparedStatement ps = getData.GetQueues(conn, id);
+            PreparedStatement ps = getData.GetContainers(conn, id);
             ResultSet rs = getData.GetResultSet(ps);
             ArrayList messageData = dataFormatter.ContainerFormatter(rs);
             message = dataFormatter.GSONFormatter(messageData);
@@ -105,5 +106,29 @@ public class ConnectionHandler {
                 se.printStackTrace();
             }
         }
+    }
+
+    public int NewQueue() throws Exception {
+        Connection conn = null;
+        int queueID = 0;
+        try {
+            conn = connector.GetConnection();
+            PreparedStatement ps = insertData.NewQueue2(conn);
+            ps.execute();
+            queueID = 1;
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            try {
+                connector.CloseConnection(conn);
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return queueID;
     }
 }

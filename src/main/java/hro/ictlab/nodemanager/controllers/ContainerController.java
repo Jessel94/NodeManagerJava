@@ -1,6 +1,6 @@
 package hro.ictlab.nodemanager.controllers;
 
-import hro.ictlab.nodemanager.database.ConnectionHandler;
+import hro.ictlab.nodemanager.database.DatabaseHandler;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,13 +12,13 @@ import javax.ws.rs.core.Response;
 @Path("/containers")
 public class ContainerController {
 
-    private ConnectionHandler connectionHandler = new ConnectionHandler();
+    private DatabaseHandler databaseHandler = new DatabaseHandler();
 
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getContainers() throws Exception {
-        String output = connectionHandler.ContainerRequest(null);
+        String output = databaseHandler.ContainerRequest(null);
         return Response.ok().entity(output).build();
     }
 
@@ -26,7 +26,7 @@ public class ContainerController {
     @Path("/{id}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getContainerById(@PathParam("id") String id) throws Exception {
-        String output = connectionHandler.ContainerRequest(id);
+        String output = databaseHandler.ContainerRequest(id);
         return Response.ok().entity(output).build();
     }
 }

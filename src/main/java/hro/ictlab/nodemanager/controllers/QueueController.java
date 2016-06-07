@@ -1,6 +1,6 @@
 package hro.ictlab.nodemanager.controllers;
 
-import hro.ictlab.nodemanager.database.ConnectionHandler;
+import hro.ictlab.nodemanager.database.DatabaseHandler;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,13 +12,13 @@ import javax.ws.rs.core.Response;
 @Path("/queues")
 public class QueueController {
 
-    private ConnectionHandler connectionHandler = new ConnectionHandler();
+    private DatabaseHandler databaseHandler = new DatabaseHandler();
 
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueues() throws Exception {
-        String output = connectionHandler.QueueRequest(null);
+        String output = databaseHandler.QueueRequest(null);
         return Response.ok().entity(output).build();
     }
 
@@ -26,7 +26,7 @@ public class QueueController {
     @Path("/{id}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueueById(@PathParam("id") String id) throws Exception {
-        String output = connectionHandler.QueueRequest(id);
+        String output = databaseHandler.QueueRequest(id);
         return Response.ok().entity(output).build();
     }
 }

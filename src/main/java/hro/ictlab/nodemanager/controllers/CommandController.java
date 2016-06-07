@@ -1,7 +1,7 @@
 package hro.ictlab.nodemanager.controllers;
 
 
-import hro.ictlab.nodemanager.rabbitmq.Send;
+import hro.ictlab.nodemanager.rabbitmq.RabbitmqHandler;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,12 +13,24 @@ import javax.ws.rs.core.Response;
 @Path("/containers")
 public class CommandController {
 
-    private Send send = new Send();
+    private RabbitmqHandler rabbitmqHandler = new RabbitmqHandler();
 
     @GET
     @Path("/{id}/{command}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getContainerById(@PathParam("id") String id, @PathParam("command") String command) throws Exception {
-        return Response.ok().entity(send.main(id, command)).build();
+    public Response issueCommand(@PathParam("id") String id, @PathParam("command") String command) throws Exception {
+        if(id != null & id != "null"){
+            if(command != null & command != "null"){
+                return Response.ok().entity(rabbitmqHandler.ProcessCommand(id, command)).build();
+            }
+        }
+        return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/requestqueue/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response requestQueue() throws Exception {
+        return Response.ok().entity(rabbitmqHandler.RequestQueue()).build();
     }
 }
