@@ -8,13 +8,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/request")
+@Path("/request/")
 public class RequestController {
 
     private RabbitmqHandler rabbitmqHandler = new RabbitmqHandler();
 
     @GET
-    @Path("/queue/")
+    @Path("queue/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response requestQueue() throws Exception {
         return Response.ok().entity(rabbitmqHandler.requestQueue()).build();

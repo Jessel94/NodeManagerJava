@@ -26,6 +26,16 @@ class GetData {
         return ps;
     }
 
+    PreparedStatement getNodes(Connection connection, String nodeID) throws Exception {
+        PreparedStatement ps;
+        if (nodeID == null) {
+            ps = connection.prepareStatement("SELECT id, name, queueid, lastchecked FROM Nodes");
+        } else {
+            ps = connection.prepareStatement("SELECT id, name, queueid, lastchecked FROM Nodes WHERE id = " + nodeID);
+        }
+        return ps;
+    }
+
     ResultSet getResultSet(PreparedStatement ps) throws Exception {
         return ps.executeQuery();
     }

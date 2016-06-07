@@ -9,13 +9,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/containers")
+@Path("/containers/")
 public class CommandController {
 
     private RabbitmqHandler rabbitmqHandler = new RabbitmqHandler();
 
     @GET
-    @Path("/{id}/{command}")
+    @Path("{id}/{command}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response issueCommand(@PathParam("id") String id, @PathParam("command") String command) throws Exception {
         if (id != null & id != "null") {

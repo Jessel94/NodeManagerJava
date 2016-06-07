@@ -37,14 +37,15 @@ public class DatabaseHandler {
         return message;
     }
 
-    public String containerQueueID(String id) throws Exception {
+    public String nodeRequest(String id) throws Exception {
         Connection conn = null;
-        String messageData = null;
+        String message = "No Data";
         try {
             conn = connector.getConnection();
-            PreparedStatement ps = getData.getContainers(conn, id);
+            PreparedStatement ps = getData.getNodes(conn, id);
             ResultSet rs = getData.getResultSet(ps);
-            messageData = Integer.toString(dataFormatter.containerData(rs).getQueueid());
+            ArrayList messageData = dataFormatter.nodeFormatter(rs);
+            message = dataFormatter.gsonFormatter(messageData);
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -58,7 +59,7 @@ public class DatabaseHandler {
                 se.printStackTrace();
             }
         }
-        return messageData;
+        return message;
     }
 
     public String queueRequest(String id) throws Exception {
@@ -86,14 +87,14 @@ public class DatabaseHandler {
         return message;
     }
 
-    public ArrayList queueData(String id) throws Exception {
+    public String containerQueueID(String id) throws Exception {
         Connection conn = null;
-        ArrayList messageData = new ArrayList();
+        String messageData = null;
         try {
             conn = connector.getConnection();
-            PreparedStatement ps = getData.getQueues(conn, id);
+            PreparedStatement ps = getData.getContainers(conn, id);
             ResultSet rs = getData.getResultSet(ps);
-            messageData = dataFormatter.containerFormatter(rs);
+            messageData = Integer.toString(dataFormatter.containerData(rs).getQueueid());
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -140,6 +141,9 @@ public class DatabaseHandler {
             PreparedStatement ps = insertData.newQueue(conn, hostName, userName, passWord);
             ResultSet rs = insertData.getResultSet(ps);
             queueID = dataFormatter.queueData(rs).getId();
+            String nodeName = "Node" + Integer.toString(queueID);
+            ps = insertData.newNode(conn, nodeName, queueID);
+            insertData.executeStatement(ps);
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();

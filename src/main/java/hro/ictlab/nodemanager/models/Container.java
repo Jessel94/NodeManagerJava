@@ -1,10 +1,12 @@
 package hro.ictlab.nodemanager.models;
 
+import java.sql.Timestamp;
+
 public class Container {
     private int id;
     private int queueid;
     private String name;
-    private String creationdate;
+    private Timestamp creationdate;
     private String state;
 
     public int getId() {
@@ -31,11 +33,11 @@ public class Container {
         this.name = name;
     }
 
-    public String getCreationdate() {
+    public Timestamp getCreationdate() {
         return creationdate;
     }
 
-    public void setCreationdate(String creationdate) {
+    public void setCreationdate(Timestamp creationdate) {
         this.creationdate = creationdate;
     }
 

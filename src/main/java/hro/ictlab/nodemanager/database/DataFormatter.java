@@ -2,6 +2,7 @@ package hro.ictlab.nodemanager.database;
 
 import com.google.gson.Gson;
 import hro.ictlab.nodemanager.models.Container;
+import hro.ictlab.nodemanager.models.Node;
 import hro.ictlab.nodemanager.models.Queue;
 
 import java.sql.ResultSet;
@@ -26,7 +27,7 @@ class DataFormatter {
         container.setId(rs.getInt("id"));
         container.setQueueid(rs.getInt("queueid"));
         container.setName(rs.getString("name"));
-        container.setCreationdate(rs.getString("creationdate"));
+        container.setCreationdate(rs.getTimestamp("creationdate"));
         container.setState(rs.getString("state"));
         return container;
     }
@@ -69,6 +70,25 @@ class DataFormatter {
         } else {
             return null;
         }
+    }
+
+    ArrayList nodeFormatter(ResultSet rs) throws Exception {
+        ArrayList messageData = new ArrayList();
+        while (rs.next()) {
+            Node node = fillNode(rs);
+            messageData.add(node);
+        }
+        rs.close();
+        return messageData;
+    }
+
+    private Node fillNode(ResultSet rs) throws Exception {
+        Node node = new Node();
+        node.setId(rs.getInt("id"));
+        node.setName(rs.getString("name"));
+        node.setQueueid(rs.getInt("queueid"));
+        node.setLastchecked(rs.getTimestamp("lastchecked"));
+        return node;
     }
 
     String gsonFormatter(ArrayList arrayList) {

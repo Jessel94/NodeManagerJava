@@ -9,15 +9,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/queues/")
-public class QueueController {
+@Path("/nodes/")
+public class NodeController {
 
     private DatabaseHandler databaseHandler = new DatabaseHandler();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueues() throws Exception {
-        String output = databaseHandler.queueRequest(null);
+        String output = databaseHandler.nodeRequest(null);
         return Response.ok().entity(output).build();
     }
 
@@ -25,7 +25,7 @@ public class QueueController {
     @Path("{id}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueueById(@PathParam("id") String id) throws Exception {
-        String output = databaseHandler.queueRequest(id);
+        String output = databaseHandler.nodeRequest(id);
         return Response.ok().entity(output).build();
     }
 }
