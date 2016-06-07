@@ -6,32 +6,27 @@ import java.sql.ResultSet;
 
 class GetData {
 
-    PreparedStatement GetContainers(Connection connection, String containerID) throws Exception
-    {
+    PreparedStatement GetContainers(Connection connection, String containerID) throws Exception {
         PreparedStatement ps;
-        if(containerID == null){
+        if (containerID == null) {
             ps = connection.prepareStatement("SELECT id, name, creationdate, state, queueid FROM Containers");
-        }
-        else{
+        } else {
             ps = connection.prepareStatement("SELECT id, name, creationdate, state, queueid FROM Containers WHERE id = " + containerID);
         }
         return ps;
     }
 
-    PreparedStatement GetQueues(Connection connection, String containerID) throws Exception
-    {
+    PreparedStatement GetQueues(Connection connection, String containerID) throws Exception {
         PreparedStatement ps;
-        if(containerID == null){
+        if (containerID == null) {
             ps = connection.prepareStatement("SELECT id, hostname, queuename, queuepass FROM Queues");
-        }
-        else{
+        } else {
             ps = connection.prepareStatement("SELECT id, hostname, queuename, queuepass FROM Queues WHERE id = " + containerID);
         }
         return ps;
     }
 
-    ResultSet GetResultSet(PreparedStatement ps) throws Exception
-    {
+    ResultSet GetResultSet(PreparedStatement ps) throws Exception {
         return ps.executeQuery();
     }
 }

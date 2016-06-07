@@ -1,7 +1,7 @@
 package hro.ictlab.nodemanager.models;
 
 public class Queue {
-    private int id ;
+    private int id;
     private String hostname;
     private String queuename;
     private String queuepass;

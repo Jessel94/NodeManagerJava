@@ -22,7 +22,7 @@ public class ContainerController {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response newContainer(@Context HttpServletRequest request) throws  Exception{
+    public Response newContainer(@Context HttpServletRequest request) throws Exception {
         return Response.ok().build();
     }
 

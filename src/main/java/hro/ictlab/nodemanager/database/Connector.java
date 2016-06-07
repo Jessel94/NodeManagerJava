@@ -7,14 +7,14 @@ class Connector {
 
     // JDBC driver name and database URL
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql://145.24.222.223:3306/NodeManager?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static final String DB_URL = "jdbc:mysql://" + System.getenv("MYSQL") + "/NodeManager?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
     //  database credentials
-    private static final String USER = "0882805";
-    private static final String PASS = "100ddJ";
+    private static final String USER = System.getenv("MYSQL_USER");
+    private static final String PASS = System.getenv("MYSQL_PASS");
 
 
-    Connection GetConnection() throws Exception{
+    Connection GetConnection() throws Exception {
         //STEP 1: Register JDBC driver
         Class.forName(JDBC_DRIVER);
 
@@ -22,9 +22,9 @@ class Connector {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    void CloseConnection(Connection conn) throws Exception{
+    void CloseConnection(Connection conn) throws Exception {
         //finally block used to close resources
-        if(conn!=null) {
+        if (conn != null) {
             conn.close();
         }
     }

@@ -16,7 +16,7 @@ public class RabbitmqHandler {
         Connection conn = null;
         Channel channel = null;
         String result = "no data";
-        try{
+        try {
             conn = connector.GetConnection();
             channel = connector.GetChannel(conn);
             if (message.equals("start") || message.equals("stop") || message.equals("restart")) {
@@ -32,16 +32,13 @@ public class RabbitmqHandler {
                     databaseHandler.UpdateContainer(containerID, "Restarting");
                 }
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw e;
-        }
-        finally {
-            try{
+        } finally {
+            try {
                 connector.CloseChannel(channel);
                 connector.CloseConnection(conn);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 throw e;
             }
         }
@@ -52,7 +49,7 @@ public class RabbitmqHandler {
         Connection conn = null;
         Channel channel = null;
         String result = "no data";
-        try{
+        try {
             conn = connector.GetConnection();
             channel = connector.GetChannel(conn);
             int queueID = databaseHandler.NewQueue();
@@ -60,16 +57,13 @@ public class RabbitmqHandler {
             String userName = "test";
             String passWord = "test";
             result = messageBuilder.main(result, "setid", userName, passWord);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw e;
-        }
-        finally {
-            try{
+        } finally {
+            try {
                 connector.CloseChannel(channel);
                 connector.CloseConnection(conn);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 throw e;
             }
         }

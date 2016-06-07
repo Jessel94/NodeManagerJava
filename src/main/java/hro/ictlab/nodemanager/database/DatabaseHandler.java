@@ -31,9 +31,9 @@ public class DatabaseHandler {
             //Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            try{
+            try {
                 connector.CloseConnection(conn);
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
             }
         }
@@ -56,9 +56,9 @@ public class DatabaseHandler {
             //Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            try{
+            try {
                 connector.CloseConnection(conn);
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
             }
         }
@@ -81,9 +81,9 @@ public class DatabaseHandler {
             //Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            try{
+            try {
                 connector.CloseConnection(conn);
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
             }
         }
@@ -105,9 +105,9 @@ public class DatabaseHandler {
             //Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            try{
+            try {
                 connector.CloseConnection(conn);
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
             }
         }

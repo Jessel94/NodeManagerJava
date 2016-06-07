@@ -1,7 +1,7 @@
 package hro.ictlab.nodemanager.models;
 
 public class Container {
-    private int id ;
+    private int id;
     private int queueid;
     private String name;
     private String creationdate;
