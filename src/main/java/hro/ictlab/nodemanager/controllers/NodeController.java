@@ -17,15 +17,13 @@ public class NodeController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueues() throws Exception {
-        String output = databaseHandler.nodeRequest(null);
-        return Response.ok().entity(output).build();
+        return Response.ok().entity(databaseHandler.nodeRequest(null)).build();
     }
 
     @GET
     @Path("{id}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQueueById(@PathParam("id") String id) throws Exception {
-        String output = databaseHandler.nodeRequest(id);
-        return Response.ok().entity(output).build();
+        return Response.ok().entity(databaseHandler.nodeRequest(id)).build();
     }
 }

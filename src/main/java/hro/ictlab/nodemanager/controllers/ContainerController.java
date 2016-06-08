@@ -18,16 +18,14 @@ public class ContainerController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getContainers() throws Exception {
-        String output = databaseHandler.containerRequest(null);
-        return Response.ok().entity(output).build();
+        return Response.ok().entity(databaseHandler.containerRequest(null)).build();
     }
 
     @GET
     @Path("{id}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getContainerById(@PathParam("id") String id) throws Exception {
-        String output = databaseHandler.containerRequest(id);
-        return Response.ok().entity(output).build();
+        return Response.ok().entity(databaseHandler.containerRequest(id)).build();
     }
 
     @GET

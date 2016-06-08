@@ -48,7 +48,7 @@ public class RabbitmqHandler {
         return result;
     }
 
-    public String requestQueue() throws Exception {
+    public String requestQueue(String ip) throws Exception {
         Connection conn = null;
         Channel channel = null;
         String result = "no data";
@@ -59,7 +59,7 @@ public class RabbitmqHandler {
             String userName = generator.generateUser();
             String passWord = generator.generatePass();
             rabbitMQ.createUser(userName, passWord);
-            int queueID = databaseHandler.newQueue(hostName, userName, passWord);
+            int queueID = databaseHandler.newQueue(hostName, userName, passWord, ip);
             result = queue.newQueue(channel, queueID);
             result = messageBuilder.main(result, "setid", userName, passWord);
         } catch (Exception e) {

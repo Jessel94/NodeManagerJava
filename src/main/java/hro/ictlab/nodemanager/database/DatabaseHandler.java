@@ -133,7 +133,7 @@ public class DatabaseHandler {
         }
     }
 
-    public int newQueue(String hostName, String userName, String passWord) throws Exception {
+    public int newQueue(String hostName, String userName, String passWord, String ip) throws Exception {
         Connection conn = null;
         int queueID = 0;
         try {
@@ -141,8 +141,7 @@ public class DatabaseHandler {
             PreparedStatement ps = insertData.newQueue(conn, hostName, userName, passWord);
             ResultSet rs = insertData.getResultSet(ps);
             queueID = dataFormatter.queueData(rs).getId();
-            String nodeName = "Node" + Integer.toString(queueID);
-            ps = insertData.newNode(conn, nodeName, queueID);
+            ps = insertData.newNode(conn, ip, queueID);
             insertData.executeStatement(ps);
         } catch (SQLException se) {
             //Handle errors for JDBC
