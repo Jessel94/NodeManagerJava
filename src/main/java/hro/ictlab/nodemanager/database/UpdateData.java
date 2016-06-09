@@ -9,6 +9,10 @@ class UpdateData {
         return ("UPDATE Containers SET state='" + newStatus + "' WHERE id = " + containerID);
     }
 
+    String nodeStatus(String queueid) throws Exception {
+        return ("UPDATE Nodes SET lastchecked = NULL WHERE queueid = " + queueid);
+    }
+
     Statement getStatement(Connection connection) throws Exception {
         return connection.createStatement();
     }

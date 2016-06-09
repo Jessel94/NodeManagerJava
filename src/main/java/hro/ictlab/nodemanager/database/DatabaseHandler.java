@@ -133,28 +133,6 @@ public class DatabaseHandler {
         }
     }
 
-    public void updateContainerHB(String id, String newStatus) throws Exception {
-        Connection conn = null;
-        try {
-            conn = connector.getConnection();
-            Statement statement = updateData.getStatement(conn);
-            String sql = updateData.containerStatus(id, newStatus);
-            updateData.executeUpdate(statement, sql);
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        } finally {
-            try {
-                connector.closeConnection(conn);
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-    }
-
     public int newQueue(String hostName, String userName, String passWord, String ip) throws Exception {
         Connection conn = null;
         int queueID = 0;

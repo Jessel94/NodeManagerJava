@@ -1,5 +1,6 @@
 package hro.ictlab.nodemanager.hearthbeat;
 
+import hro.ictlab.nodemanager.database.DatabaseHandler;
 import hro.ictlab.nodemanager.models.DockerData;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,6 +13,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class HearthBeatHandler {
+
+    private DatabaseHandler databaseHandler = new DatabaseHandler();
 
     public String readHeartBeat(String ip) throws Exception {
         HttpURLConnection conn = (HttpURLConnection) new URL("http://" + ip + ":53452").openConnection();
@@ -40,6 +43,7 @@ public class HearthBeatHandler {
 
             DockerData dockerData = fillDockerData(dockerJson);
             if (dockerData != null) {
+                databaseHandler.updateContainer(dockerData.getContainerID(), dockerData.getStatus());
                 dockerDatas.add(dockerData);
             }
         }
@@ -51,16 +55,20 @@ public class HearthBeatHandler {
         DockerData dockerData = new DockerData();
         // Deserialize json into object fields
         try {
-            String containerID = jsonObject.getString("CONTAINER ID");
-            dockerData.setStatus(jsonObject.getString("STATUS"));
-            dockerData.setContainerID(containerID);
-            /*if(isInteger(containerID) == true) {
-                dockerData.setStatus(jsonObject.getString("STATUS"));
-                dockerData.setContainerID(containerID);
+            if(jsonObject.has("NAMES")){
+                String containerID = jsonObject.getString("NAMES");
+                String containerCheck = containerID.replaceAll("container", "");
+                if(isInteger(containerCheck) == true) {
+                    dockerData.setStatus(jsonObject.getString("STATUS"));
+                    dockerData.setContainerID(containerCheck);
+                }
+                else {
+                    return null;
+                }
             }
             else {
                 return null;
-            }*/
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
