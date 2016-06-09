@@ -50,6 +50,7 @@ public class NodeController {
         JSONArray jsonArray = jsnobject.getJSONArray("containers");
         ArrayList<DockerData> outputData = hearthBeatHandler.fillDockerData(jsonArray);
         JSONArray jsArray = new JSONArray(outputData);
+        databaseHandler.updateNode("11");
         return Response.ok().entity(jsArray.toString()).build();
     }
 }

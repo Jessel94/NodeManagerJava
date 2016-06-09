@@ -2,7 +2,6 @@ package hro.ictlab.nodemanager.database;
 
 import com.google.gson.Gson;
 import hro.ictlab.nodemanager.models.Container;
-import hro.ictlab.nodemanager.models.DockerData;
 import hro.ictlab.nodemanager.models.Node;
 import hro.ictlab.nodemanager.models.Queue;
 
@@ -90,6 +89,18 @@ class DataFormatter {
         node.setQueueid(rs.getInt("queueid"));
         node.setLastchecked(rs.getTimestamp("lastchecked"));
         return node;
+    }
+
+    Node nodeData(ResultSet rs) throws Exception {
+        if (rs.next()) {
+            Node node = new Node();
+            node.setName(rs.getString(2));
+            node.setQueueid(rs.getInt(4));
+            rs.close();
+            return node;
+        } else {
+            return null;
+        }
     }
 
     String gsonFormatter(ArrayList arrayList) {

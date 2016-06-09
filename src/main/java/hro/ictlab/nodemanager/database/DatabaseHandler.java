@@ -19,8 +19,10 @@ public class DatabaseHandler {
             conn = connector.getConnection();
             PreparedStatement ps = getData.getContainers(conn, id);
             ResultSet rs = getData.getResultSet(ps);
-            ArrayList messageData = dataFormatter.containerFormatter(rs);
-            message = dataFormatter.gsonFormatter(messageData);
+            if (rs != null) {
+                ArrayList messageData = dataFormatter.containerFormatter(rs);
+                message = dataFormatter.gsonFormatter(messageData);
+            }
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -44,8 +46,10 @@ public class DatabaseHandler {
             conn = connector.getConnection();
             PreparedStatement ps = getData.getNodes(conn, id);
             ResultSet rs = getData.getResultSet(ps);
-            ArrayList messageData = dataFormatter.nodeFormatter(rs);
-            message = dataFormatter.gsonFormatter(messageData);
+            if (rs != null) {
+                ArrayList messageData = dataFormatter.nodeFormatter(rs);
+                message = dataFormatter.gsonFormatter(messageData);
+            }
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -69,8 +73,10 @@ public class DatabaseHandler {
             conn = connector.getConnection();
             PreparedStatement ps = getData.getQueues(conn, id);
             ResultSet rs = getData.getResultSet(ps);
-            ArrayList messageData = dataFormatter.queueFormatter(rs);
-            message = dataFormatter.gsonFormatter(messageData);
+            if (rs != null) {
+                ArrayList messageData = dataFormatter.queueFormatter(rs);
+                message = dataFormatter.gsonFormatter(messageData);
+            }
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -111,12 +117,58 @@ public class DatabaseHandler {
         return messageData;
     }
 
+    public String nodeQueueID(String id) throws Exception {
+        Connection conn = null;
+        String messageData = null;
+        try {
+            conn = connector.getConnection();
+            PreparedStatement ps = getData.getNodes(conn, id);
+            ResultSet rs = getData.getResultSet(ps);
+            messageData = Integer.toString(dataFormatter.nodeData(rs).getQueueid());
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            try {
+                connector.closeConnection(conn);
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return messageData;
+    }
+
     public void updateContainer(String id, String newStatus) throws Exception {
         Connection conn = null;
         try {
             conn = connector.getConnection();
             Statement statement = updateData.getStatement(conn);
             String sql = updateData.containerStatus(id, newStatus);
+            updateData.executeUpdate(statement, sql);
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            try {
+                connector.closeConnection(conn);
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+
+    public void updateNode(String queueid) throws Exception {
+        Connection conn = null;
+        try {
+            conn = connector.getConnection();
+            Statement statement = updateData.getStatement(conn);
+            String sql = updateData.nodeStatus(queueid);
             updateData.executeUpdate(statement, sql);
         } catch (SQLException se) {
             //Handle errors for JDBC

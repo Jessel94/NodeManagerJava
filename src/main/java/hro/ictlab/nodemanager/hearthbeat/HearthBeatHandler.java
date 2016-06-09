@@ -16,6 +16,18 @@ public class HearthBeatHandler {
 
     private DatabaseHandler databaseHandler = new DatabaseHandler();
 
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        } catch (NullPointerException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+
     public String readHeartBeat(String ip) throws Exception {
         HttpURLConnection conn = (HttpURLConnection) new URL("http://" + ip + ":53452").openConnection();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -28,7 +40,6 @@ public class HearthBeatHandler {
         }
         return out.toString();
     }
-
 
     public ArrayList<DockerData> fillDockerData(JSONArray jsonArray) throws Exception {
         JSONObject dockerJson;
@@ -47,7 +58,6 @@ public class HearthBeatHandler {
                 dockerDatas.add(dockerData);
             }
         }
-
         return dockerDatas;
     }
 
@@ -75,17 +85,5 @@ public class HearthBeatHandler {
         }
         // Return new object
         return dockerData;
-    }
-
-    public static boolean isInteger(String s) {
-        try {
-            Integer.parseInt(s);
-        } catch(NumberFormatException e) {
-            return false;
-        } catch(NullPointerException e) {
-            return false;
-        }
-        // only got here if we didn't return false
-        return true;
     }
 }
