@@ -4,14 +4,9 @@ import com.rabbitmq.client.Channel;
 
 class Send {
 
-    private final MessageBuilder messageBuilder = new MessageBuilder();
-
-    String startStopRestart(String containerID, String queueID, String message, Channel channel) throws Exception {
-
-        String messageArray = messageBuilder.main(containerID, message, null, null);
-
+    String startStopRestart(String queueID, String message, Channel channel) throws Exception {
         channel.queueDeclare(queueID, true, false, false, null);
-        channel.basicPublish("", queueID, null, messageArray.getBytes("UTF-8"));
-        return "succes";
+        channel.basicPublish("", queueID, null, message.getBytes("UTF-8"));
+        return "Message has been pushed into the Queue.";
     }
 }

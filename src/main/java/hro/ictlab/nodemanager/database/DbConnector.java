@@ -3,7 +3,7 @@ package hro.ictlab.nodemanager.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-class Connector {
+public class DbConnector {
 
     // JDBC driver name and database URL
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -14,16 +14,15 @@ class Connector {
     private static final String PASS = System.getenv("MYSQL_PASS");
 
 
-    Connection getConnection() throws Exception {
-        //STEP 1: Register JDBC driver
+    public Connection getConnection() throws Exception {
+        //Register JDBC driver
         Class.forName(JDBC_DRIVER);
 
-        //STEP 2: Open a connection
+        //Open a connection
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    void closeConnection(Connection conn) throws Exception {
-        //finally block used to close resources
+    public void closeConnection(Connection conn) throws Exception {
         if (conn != null) {
             conn.close();
         }

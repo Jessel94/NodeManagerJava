@@ -6,12 +6,12 @@ import java.sql.ResultSet;
 
 class GetData {
 
-    PreparedStatement getContainers(Connection connection, String containerID) throws Exception {
+    PreparedStatement getContainers(Connection connection, String containerId) throws Exception {
         PreparedStatement ps;
-        if (containerID == null) {
+        if (containerId == null) {
             ps = connection.prepareStatement("SELECT id, name, creationdate, state, queueid FROM Containers");
         } else {
-            ps = connection.prepareStatement("SELECT id, name, creationdate, state, queueid FROM Containers WHERE id = " + containerID);
+            ps = connection.prepareStatement("SELECT id, name, creationdate, state, queueid FROM Containers WHERE id = " + containerId);
         }
         return ps;
     }

@@ -1,6 +1,5 @@
 package hro.ictlab.nodemanager.hearthbeat;
 
-import hro.ictlab.nodemanager.database.DatabaseHandler;
 import hro.ictlab.nodemanager.models.DockerData;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,9 +13,7 @@ import java.util.ArrayList;
 
 public class HearthBeatHandler {
 
-    private DatabaseHandler databaseHandler = new DatabaseHandler();
-
-    public static boolean isInteger(String s) {
+    private static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
         } catch (NumberFormatException e) {
@@ -54,7 +51,6 @@ public class HearthBeatHandler {
 
             DockerData dockerData = fillDockerData(dockerJson);
             if (dockerData != null) {
-                databaseHandler.updateContainer(dockerData.getContainerID(), dockerData.getStatus());
                 dockerDatas.add(dockerData);
             }
         }
@@ -68,7 +64,7 @@ public class HearthBeatHandler {
             if(jsonObject.has("NAMES")){
                 String containerID = jsonObject.getString("NAMES");
                 String containerCheck = containerID.replaceAll("container", "");
-                if(isInteger(containerCheck) == true) {
+                if (isInteger(containerCheck)) {
                     dockerData.setStatus(jsonObject.getString("STATUS"));
                     dockerData.setContainerID(containerCheck);
                 }

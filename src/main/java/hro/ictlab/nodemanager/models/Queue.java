@@ -14,24 +14,12 @@ public class Queue {
         this.id = id;
     }
 
-    public String getHostname() {
-        return hostname;
-    }
-
     public void setHostname(String hostname) {
         this.hostname = hostname;
     }
 
-    public String getQueuename() {
-        return queuename;
-    }
-
     public void setQueuename(String queuename) {
         this.queuename = queuename;
-    }
-
-    public String getQueuepass() {
-        return queuepass;
     }
 
     public void setQueuepass(String queuepass) {
