@@ -74,6 +74,19 @@ public class DatabaseHandler {
         }
     }
 
+    public boolean isCommandValid(String command) {
+        if (command.equals("start")) {
+            return true;
+        }
+        if (command.equals("stop")) {
+            return true;
+        }
+        if (command.equals("restart")) {
+            return true;
+        }
+        return false;
+    }
+
     //Currently not used
     /*
     public String queueRequest(String id) throws Exception {

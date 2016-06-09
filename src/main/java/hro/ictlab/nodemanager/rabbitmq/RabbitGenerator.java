@@ -1,9 +1,9 @@
-package hro.ictlab.nodemanager.services;
+package hro.ictlab.nodemanager.rabbitmq;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-public class Generator {
+class RabbitGenerator {
 
     private final SecureRandom random = new SecureRandom();
 
@@ -11,11 +11,11 @@ public class Generator {
         return new BigInteger(130, random).toString(28);
     }
 
-    public String generateUser() {
+    String generateUser() {
         return nextSessionId();
     }
 
-    public String generatePass() {
+    String generatePass() {
         return nextSessionId();
     }
 }

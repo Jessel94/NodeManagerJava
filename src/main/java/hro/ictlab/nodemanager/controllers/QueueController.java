@@ -3,10 +3,10 @@ package hro.ictlab.nodemanager.controllers;
 import com.rabbitmq.client.Channel;
 import hro.ictlab.nodemanager.database.DatabaseHandler;
 import hro.ictlab.nodemanager.database.DbConnector;
+import hro.ictlab.nodemanager.rabbitmq.RabbitApiConnector;
 import hro.ictlab.nodemanager.rabbitmq.RabbitConnector;
 import hro.ictlab.nodemanager.rabbitmq.RabbitmqHandler;
-import hro.ictlab.nodemanager.services.Generator;
-import hro.ictlab.nodemanager.services.RabbitMQ;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -25,8 +25,7 @@ public class QueueController {
     private final DatabaseHandler databaseHandler = new DatabaseHandler();
     private final DbConnector dbConnector = new DbConnector();
     private final RabbitConnector rabbitConnector = new RabbitConnector();
-    private final Generator generator = new Generator();
-    private final RabbitMQ rabbitMQ = new RabbitMQ();
+    private final RabbitApiConnector rabbitApiConnector = new RabbitApiConnector();
 
     @GET
     @Path("request/")
@@ -35,15 +34,17 @@ public class QueueController {
         Connection dbConn = null;
         com.rabbitmq.client.Connection rabbitConn = null;
         Channel rabbitChannel = null;
+        CloseableHttpClient client = null;
         try {
             dbConn = dbConnector.getConnection();
             rabbitConn = rabbitConnector.getConnection();
             rabbitChannel = rabbitConnector.getChannel(rabbitConn);
+            client = rabbitApiConnector.getConnection();
 
             String hostName = System.getenv("RABBITMQ");
-            String userName = generator.generateUser();
-            String passWord = generator.generatePass();
-            rabbitMQ.createUser(userName, passWord);
+            String userName = rabbitmqHandler.generateUserName();
+            String passWord = rabbitmqHandler.generatePassWord();
+            rabbitmqHandler.createUser(userName, passWord, client);
             int queueID = databaseHandler.newQueue(hostName, userName, passWord, requestContext.getRemoteAddr(), dbConn);
             String output = rabbitmqHandler.requestQueue(queueID, userName, passWord, rabbitChannel);
             return Response.ok().entity(output).build();
@@ -54,6 +55,7 @@ public class QueueController {
             try {
                 dbConnector.closeConnection(dbConn);
                 rabbitConnector.closeConnection(rabbitConn, rabbitChannel);
+                rabbitApiConnector.closeConnection(client);
             } catch (Exception e) {
                 e.printStackTrace();
             }

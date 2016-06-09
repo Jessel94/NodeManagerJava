@@ -5,7 +5,6 @@ import hro.ictlab.nodemanager.database.DatabaseHandler;
 import hro.ictlab.nodemanager.database.DbConnector;
 import hro.ictlab.nodemanager.rabbitmq.RabbitConnector;
 import hro.ictlab.nodemanager.rabbitmq.RabbitmqHandler;
-import hro.ictlab.nodemanager.services.CommandChecker;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -19,7 +18,6 @@ public class ContainerController {
 
     private final DatabaseHandler databaseHandler = new DatabaseHandler();
     private final RabbitmqHandler rabbitmqHandler = new RabbitmqHandler();
-    private final CommandChecker commandChecker = new CommandChecker();
     private final DbConnector dbConnector = new DbConnector();
     private final RabbitConnector rabbitConnector = new RabbitConnector();
 
@@ -70,7 +68,7 @@ public class ContainerController {
         com.rabbitmq.client.Connection rabbitConn = null;
         Channel rabbitChannel = null;
         try {
-            if (commandChecker.isValidCommand(command)) {
+            if (databaseHandler.isCommandValid(command)) {
                 dbConn = dbConnector.getConnection();
                 rabbitConn = rabbitConnector.getConnection();
                 rabbitChannel = rabbitConnector.getChannel(rabbitConn);
