@@ -25,11 +25,8 @@ class MessageBuilder {
     }
 
     private JSONObject start(String containerID) {
-        JSONObject jo1 = new JSONObject();
-        jo1.put("container", containerID);
-
         JSONObject jo2 = new JSONObject();
-        jo2.put("start", jo1);
+        jo2.put("start", containerID);
 
         return jo2;
     }
