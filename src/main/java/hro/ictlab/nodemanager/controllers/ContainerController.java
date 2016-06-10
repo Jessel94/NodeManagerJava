@@ -79,7 +79,7 @@ public class ContainerController {
                 rabbitChannel = rabbitConnector.getChannel(rabbitConn);
 
                 String queueId = dbHandler.containerQueueID(containerId, dbConn);
-                String output = rabbitHandler.processCommand(containerId, queueId, command, rabbitChannel);
+                String output = rabbitHandler.processCommand(containerId, queueId, command, rabbitChannel, null, null, null);
                 dbHandler.updateContainer(containerId, command, dbConn, false);
 
                 return Response.ok().entity(output).build();
@@ -112,8 +112,11 @@ public class ContainerController {
             rabbitChannel = rabbitConnector.getChannel(rabbitConn);
 
             NewContainer requestModel = postDataFormatter.formatNewContainer(body);
+            String queueId = dbHandler.nodeQueueID(requestModel.getNode(), dbConn);
+            String containerId = dbHandler.newContainer(requestModel.getContainerName(), "Starting", queueId, dbConn);
+            String output = rabbitHandler.processCommand(containerId, queueId, "create", rabbitChannel, requestModel.getHostPort(), requestModel.getContainerPort(), requestModel.getBaseImage());
 
-            return Response.ok().build();
+            return Response.ok(output).build();
 
         } catch (Exception e) {
             e.printStackTrace();

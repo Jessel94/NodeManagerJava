@@ -30,7 +30,7 @@ public class DbHandler {
 
     public String nodeRequest(String nodeId, Connection conn) throws Exception {
         String result = "No Data";
-        PreparedStatement ps = getData.getNodes(conn, nodeId);
+        PreparedStatement ps = getData.getNodes(conn, nodeId, null);
         ResultSet rs = getData.getResultSet(ps);
         if (isResultSetNotEmpty(rs)) {
             ArrayList messageData = dataFormatter.nodeFormatter(rs);
@@ -43,6 +43,12 @@ public class DbHandler {
         PreparedStatement ps = getData.getContainers(conn, containerId);
         ResultSet rs = getData.getResultSet(ps);
         return Integer.toString(dataFormatter.containerData(rs).getQueueid());
+    }
+
+    public String nodeQueueID(String nodeIp, Connection conn) throws Exception {
+        PreparedStatement ps = getData.getNodes(conn, null, nodeIp);
+        ResultSet rs = getData.getResultSet(ps);
+        return Integer.toString(dataFormatter.nodeData(rs).getQueueid());
     }
 
     public void updateContainer(String containerId, String command, Connection conn, boolean customStatus) throws Exception {
@@ -74,10 +80,16 @@ public class DbHandler {
     public int newQueue(String hostName, String userName, String passWord, String ip, Connection conn) throws Exception {
         PreparedStatement ps = insertData.newQueue(conn, hostName, userName, passWord);
         ResultSet rs = insertData.getResultSet(ps);
-        int queueID = dataFormatter.queueData(rs).getId();
+        int queueID = dataFormatter.queueDataSql(rs).getId();
         ps = insertData.newNode(conn, ip, queueID);
         insertData.executeStatement(ps);
         return queueID;
+    }
+
+    public String newContainer(String name, String state, String queueId, Connection conn) throws Exception {
+        PreparedStatement ps = insertData.newContainer(conn, name, state, queueId);
+        ResultSet rs = insertData.getResultSet(ps);
+        return Integer.toString(dataFormatter.containerDataSql(rs).getId());
     }
 
     private boolean isResultSetNotEmpty(ResultSet rs) throws Exception {

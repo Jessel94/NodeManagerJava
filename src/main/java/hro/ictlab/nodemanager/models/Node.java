@@ -4,6 +4,15 @@ import java.sql.Timestamp;
 
 public class Node {
     private int id;
+
+    public String getName() {
+        return name;
+    }
+
+    public Timestamp getLastchecked() {
+        return lastchecked;
+    }
+
     private String name;
     private Timestamp lastchecked;
     private int queueid;

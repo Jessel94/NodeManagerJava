@@ -7,6 +7,17 @@ import java.sql.Statement;
 
 class InsertData {
 
+    PreparedStatement newContainer(Connection connection, String name, String state, String queueId) throws Exception {
+        PreparedStatement ps = connection.prepareStatement(
+                "INSERT INTO Containers (id, name, creationdate, state, queueid)" +
+                        " VALUES (NULL, ?, NULL, ?, ?)", Statement.RETURN_GENERATED_KEYS
+        );
+        ps.setString(1, name);
+        ps.setString(2, state);
+        ps.setInt(3, Integer.parseInt(queueId));
+        return ps;
+    }
+
     PreparedStatement newQueue(Connection connection, String hostName, String userName, String passWord) throws Exception {
         PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO Queues (id, hostname, queuename, queuepass)" +

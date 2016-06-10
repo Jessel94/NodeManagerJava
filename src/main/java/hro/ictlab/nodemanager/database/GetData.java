@@ -16,12 +16,14 @@ class GetData {
         return ps;
     }
 
-    PreparedStatement getNodes(Connection connection, String nodeID) throws Exception {
+    PreparedStatement getNodes(Connection connection, String nodeID, String nodeIp) throws Exception {
         PreparedStatement ps;
-        if (nodeID == null) {
-            ps = connection.prepareStatement("SELECT id, name, queueid, lastchecked FROM Nodes");
-        } else {
+        if (nodeID != null) {
             ps = connection.prepareStatement("SELECT id, name, queueid, lastchecked FROM Nodes WHERE id = " + nodeID);
+        } else if (nodeIp != null) {
+            ps = connection.prepareStatement("SELECT id, name, queueid, lastchecked FROM Nodes WHERE name = '" + nodeIp + "'");
+        } else {
+            ps = connection.prepareStatement("SELECT id, name, queueid, lastchecked FROM Nodes");
         }
         return ps;
     }
