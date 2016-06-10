@@ -12,6 +12,9 @@ class MessageBuilder {
         if (command.equals("restart")) {
             return generateRestart();
         }
+        if (command.equals("delete")) {
+            return generateDelete();
+        }
         return null;
     }
 
@@ -25,5 +28,9 @@ class MessageBuilder {
 
     private String generateRestart() {
         return "Restarting";
+    }
+
+    private String generateDelete() {
+        return "Deleting";
     }
 }

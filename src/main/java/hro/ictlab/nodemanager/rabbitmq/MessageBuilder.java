@@ -16,6 +16,9 @@ class MessageBuilder {
         if (message.equals("restart")) {
             mainObjArray = actionContainer(restart(iD));
         }
+        if (message.equals("delete")) {
+            mainObjArray = actionContainer(delete(iD));
+        }
         if (message.equals("create")) {
             JSONObject temp = create(iD, nodePort, containerPort, image);
             mainObjArray = actionContainer(temp);
@@ -53,6 +56,17 @@ class MessageBuilder {
 
         JSONObject jo2 = new JSONObject();
         jo2.put("restart", jo1);
+
+        return jo2;
+    }
+
+    private JSONObject delete(String containerID) {
+        JSONObject jo1 = new JSONObject();
+        jo1.put("container", containerID);
+        jo1.put("force", true);
+
+        JSONObject jo2 = new JSONObject();
+        jo2.put("remove", jo1);
 
         return jo2;
     }

@@ -15,6 +15,7 @@ public class DbHandler {
     private final UpdateData updateData = new UpdateData();
     private final DataFormatter dataFormatter = new DataFormatter();
     private final InsertData insertData = new InsertData();
+    private final DeleteData deleteData = new DeleteData();
     private final MessageBuilder messageBuilder = new MessageBuilder();
 
 
@@ -101,6 +102,11 @@ public class DbHandler {
         PreparedStatement ps = insertData.newContainer(conn, name, state, queueId);
         ResultSet rs = insertData.getResultSet(ps);
         return Integer.toString(dataFormatter.containerDataSql(rs).getId());
+    }
+
+    public void deleteContainer(String containerId, Connection conn) throws Exception {
+        PreparedStatement ps = deleteData.deleteContainer(conn, containerId);
+        deleteData.executeStatement(ps);
     }
 
     private boolean isResultSetNotEmpty(ResultSet rs) throws Exception {

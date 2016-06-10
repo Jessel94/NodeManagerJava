@@ -98,6 +98,36 @@ public class ContainerController {
         }
     }
 
+    @GET
+    @Path("{id}/delete")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response issueContainerCommand(@PathParam("id") String containerId) throws Exception {
+        Connection dbConn = null;
+        com.rabbitmq.client.Connection rabbitConn = null;
+        Channel rabbitChannel = null;
+        try {
+            dbConn = dbConnector.getConnection();
+            rabbitConn = rabbitConnector.getConnection();
+            rabbitChannel = rabbitConnector.getChannel(rabbitConn);
+
+            String queueId = dbHandler.containerQueueID(containerId, dbConn);
+            String output = rabbitHandler.processCommand(containerId, queueId, "delete", rabbitChannel, null, null, null);
+            dbHandler.deleteContainer(containerId, dbConn);
+
+            return Response.ok(output).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError().build();
+        } finally {
+            try {
+                dbConnector.closeConnection(dbConn);
+                rabbitConnector.closeConnection(rabbitConn, rabbitChannel);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newContainer(@Context HttpServletRequest request, @Context HttpServletResponse response) throws Exception {
