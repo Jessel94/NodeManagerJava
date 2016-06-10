@@ -1,7 +1,7 @@
 package hro.ictlab.nodemanager.controllers;
 
-import hro.ictlab.nodemanager.database.DatabaseHandler;
 import hro.ictlab.nodemanager.database.DbConnector;
+import hro.ictlab.nodemanager.database.DbHandler;
 import hro.ictlab.nodemanager.hearthbeat.HearthBeatHandler;
 import hro.ictlab.nodemanager.models.DockerData;
 import org.json.JSONArray;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @Path("/nodes/")
 public class NodeController {
 
-    private final DatabaseHandler databaseHandler = new DatabaseHandler();
+    private final DbHandler dbHandler = new DbHandler();
     private final HearthBeatHandler hearthBeatHandler = new HearthBeatHandler();
     private final DbConnector dbConnector = new DbConnector();
 
@@ -29,7 +29,7 @@ public class NodeController {
         Connection conn = null;
         try {
             conn = dbConnector.getConnection();
-            return Response.ok().entity(databaseHandler.nodeRequest(null, conn)).build();
+            return Response.ok().entity(dbHandler.nodeRequest(null, conn)).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError().build();
@@ -49,7 +49,7 @@ public class NodeController {
         Connection conn = null;
         try {
             conn = dbConnector.getConnection();
-            return Response.ok().entity(databaseHandler.nodeRequest(nodeId, conn)).build();
+            return Response.ok().entity(dbHandler.nodeRequest(nodeId, conn)).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError().build();
@@ -75,8 +75,8 @@ public class NodeController {
             JSONArray outputJsonArray = outputJsonObject.getJSONArray("containers");
             ArrayList<DockerData> outputData = hearthBeatHandler.fillDockerData(outputJsonArray);
 
-            databaseHandler.updateContainerList(outputData, conn);
-            databaseHandler.updateNode("11", conn);
+            dbHandler.updateContainerList(outputData, conn);
+            dbHandler.updateNode("11", conn);
 
             JSONArray jsArray = new JSONArray(outputData);
             return Response.ok().entity(jsArray.toString()).build();

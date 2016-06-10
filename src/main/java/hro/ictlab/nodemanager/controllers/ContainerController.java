@@ -1,25 +1,30 @@
 package hro.ictlab.nodemanager.controllers;
 
 import com.rabbitmq.client.Channel;
-import hro.ictlab.nodemanager.database.DatabaseHandler;
+import hro.ictlab.nodemanager.PostDataFormatter;
 import hro.ictlab.nodemanager.database.DbConnector;
+import hro.ictlab.nodemanager.database.DbHandler;
+import hro.ictlab.nodemanager.models.NewContainer;
 import hro.ictlab.nodemanager.rabbitmq.RabbitConnector;
-import hro.ictlab.nodemanager.rabbitmq.RabbitmqHandler;
+import hro.ictlab.nodemanager.rabbitmq.RabbitHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.InputStream;
 import java.sql.Connection;
 
 @Path("/containers/")
 public class ContainerController {
 
-    private final DatabaseHandler databaseHandler = new DatabaseHandler();
-    private final RabbitmqHandler rabbitmqHandler = new RabbitmqHandler();
+    private final DbHandler dbHandler = new DbHandler();
+    private final RabbitHandler rabbitHandler = new RabbitHandler();
     private final DbConnector dbConnector = new DbConnector();
     private final RabbitConnector rabbitConnector = new RabbitConnector();
+    private final PostDataFormatter postDataFormatter = new PostDataFormatter();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -27,7 +32,7 @@ public class ContainerController {
         Connection conn = null;
         try {
             conn = dbConnector.getConnection();
-            return Response.ok().entity(databaseHandler.containerRequest(null, conn)).build();
+            return Response.ok().entity(dbHandler.containerRequest(null, conn)).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError().build();
@@ -47,7 +52,7 @@ public class ContainerController {
         Connection conn = null;
         try {
             conn = dbConnector.getConnection();
-            return Response.ok().entity(databaseHandler.containerRequest(containerId, conn)).build();
+            return Response.ok().entity(dbHandler.containerRequest(containerId, conn)).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError().build();
@@ -68,13 +73,15 @@ public class ContainerController {
         com.rabbitmq.client.Connection rabbitConn = null;
         Channel rabbitChannel = null;
         try {
-            if (databaseHandler.isCommandValid(command)) {
+            if (dbHandler.isCommandValid(command)) {
                 dbConn = dbConnector.getConnection();
                 rabbitConn = rabbitConnector.getConnection();
                 rabbitChannel = rabbitConnector.getChannel(rabbitConn);
-                String queueId = databaseHandler.containerQueueID(containerId, dbConn);
-                String output = rabbitmqHandler.processCommand(containerId, queueId, command, rabbitChannel);
-                databaseHandler.updateContainer(containerId, command, dbConn, false);
+
+                String queueId = dbHandler.containerQueueID(containerId, dbConn);
+                String output = rabbitHandler.processCommand(containerId, queueId, command, rabbitChannel);
+                dbHandler.updateContainer(containerId, command, dbConn, false);
+
                 return Response.ok().entity(output).build();
             }
             return Response.serverError().build();
@@ -93,7 +100,34 @@ public class ContainerController {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response newContainer(@Context HttpServletRequest request) throws Exception {
-        return Response.ok("I Received Something").build();
+    public Response newContainer(@Context HttpServletRequest request, @Context HttpServletResponse response) throws Exception {
+        InputStream body = null;
+        Connection dbConn = null;
+        com.rabbitmq.client.Connection rabbitConn = null;
+        Channel rabbitChannel = null;
+        try{
+            body = request.getInputStream();
+            dbConn = dbConnector.getConnection();
+            rabbitConn = rabbitConnector.getConnection();
+            rabbitChannel = rabbitConnector.getChannel(rabbitConn);
+
+            NewContainer requestModel = postDataFormatter.formatNewContainer(body);
+
+            return Response.ok().build();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError().build();
+        } finally {
+            try {
+                if(body != null){
+                    body.close();
+                }
+                dbConnector.closeConnection(dbConn);
+                rabbitConnector.closeConnection(rabbitConn, rabbitChannel);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

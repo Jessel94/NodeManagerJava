@@ -22,16 +22,6 @@ class DataFormatter {
         return messageData;
     }
 
-    ArrayList<Queue> queueFormatter(ResultSet rs) throws Exception {
-        ArrayList<Queue> messageData = new ArrayList<>();
-        while (rs.next()) {
-            Queue queue = fillQueue(rs);
-            messageData.add(queue);
-        }
-        rs.close();
-        return messageData;
-    }
-
     ArrayList<Node> nodeFormatter(ResultSet rs) throws Exception {
         ArrayList<Node> messageData = new ArrayList<>();
         while (rs.next()) {
@@ -50,15 +40,6 @@ class DataFormatter {
         container.setCreationdate(rs.getTimestamp("creationdate"));
         container.setState(rs.getString("state"));
         return container;
-    }
-
-    private Queue fillQueue(ResultSet rs) throws Exception {
-        Queue queue = new Queue();
-        queue.setId(rs.getInt("id"));
-        queue.setHostname(rs.getString("hostname"));
-        queue.setQueuename(rs.getString("queuename"));
-        queue.setQueuepass(rs.getString("queuepass"));
-        return queue;
     }
 
     private Node fillNode(ResultSet rs) throws Exception {
@@ -86,18 +67,6 @@ class DataFormatter {
             queue.setId(rs.getInt(1));
             rs.close();
             return queue;
-        } else {
-            return null;
-        }
-    }
-
-    Node nodeData(ResultSet rs) throws Exception {
-        if (rs.next()) {
-            Node node = new Node();
-            node.setName(rs.getString(2));
-            node.setQueueid(rs.getInt(4));
-            rs.close();
-            return node;
         } else {
             return null;
         }

@@ -3,7 +3,7 @@ package hro.ictlab.nodemanager.rabbitmq;
 import com.rabbitmq.client.Channel;
 import org.apache.http.impl.client.CloseableHttpClient;
 
-public class RabbitmqHandler {
+public class RabbitHandler {
 
     private final Send send = new Send();
     private final Queue queue = new Queue();

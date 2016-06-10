@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class DatabaseHandler {
+public class DbHandler {
 
     private final GetData getData = new GetData();
     private final UpdateData updateData = new UpdateData();
@@ -47,7 +47,7 @@ public class DatabaseHandler {
 
     public void updateContainer(String containerId, String command, Connection conn, boolean customStatus) throws Exception {
         Statement statement = updateData.getStatement(conn);
-        String newStatus = null;
+        String newStatus;
         if (!customStatus) {
             newStatus = messageBuilder.generateMessage(command);
         } else {
@@ -92,31 +92,4 @@ public class DatabaseHandler {
     public boolean isCommandValid(String command) {
         return command.equals("start") || command.equals("stop") || command.equals("restart");
     }
-
-    //Currently not used
-    /*
-    public String nodeQueueID(String id) throws Exception {
-        Connection conn = null;
-        String messageData = null;
-        try {
-            conn = connector.getConnection();
-            PreparedStatement ps = getData.getNodes(conn, id);
-            ResultSet rs = getData.getResultSet(ps);
-            messageData = Integer.toString(dataFormatter.nodeData(rs).getQueueid());
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        } finally {
-            try {
-                connector.closeConnection(conn);
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-        return messageData;
-    }
-    */
 }
