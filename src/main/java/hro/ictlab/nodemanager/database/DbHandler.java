@@ -1,6 +1,7 @@
 package hro.ictlab.nodemanager.database;
 
 import hro.ictlab.nodemanager.models.DockerData;
+import hro.ictlab.nodemanager.models.Node;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,6 +50,16 @@ public class DbHandler {
         PreparedStatement ps = getData.getNodes(conn, null, nodeIp);
         ResultSet rs = getData.getResultSet(ps);
         return Integer.toString(dataFormatter.nodeData(rs).getQueueid());
+    }
+
+    public ArrayList<Node> nodeList(Connection conn) throws Exception {
+        ArrayList<Node> result = null;
+        PreparedStatement ps = getData.getNodes(conn, null, null);
+        ResultSet rs = getData.getResultSet(ps);
+        if (isResultSetNotEmpty(rs)) {
+            result = dataFormatter.nodeFormatter(rs);
+        }
+        return result;
     }
 
     public void updateContainer(String containerId, String command, Connection conn, boolean customStatus) throws Exception {

@@ -19,8 +19,8 @@ public class PostDataFormatter {
         while ((line = reader.readLine()) != null)
             jb.append(line);
 
-        NewContainer[] newContainers = gson.fromJson(jb.toString(), NewContainer[].class);
+        NewContainer newContainers = gson.fromJson(jb.toString(), NewContainer.class);
 
-        return newContainers[0];
+        return newContainers;
     }
 }

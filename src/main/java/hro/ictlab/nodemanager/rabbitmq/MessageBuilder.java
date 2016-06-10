@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 class MessageBuilder {
 
-    String main(String iD, String message, String userName, String passWord, String nodePort, String containerPort, String image) {
+    String buildMessage(String iD, String message, String userName, String passWord, String nodePort, String containerPort, String image) {
         JSONArray mainObjArray = new JSONArray();
         if (message.equals("start")) {
             mainObjArray = actionContainer(start(iD));
@@ -17,7 +17,8 @@ class MessageBuilder {
             mainObjArray = actionContainer(restart(iD));
         }
         if (message.equals("create")) {
-            mainObjArray = actionContainer(create(iD, nodePort, containerPort, image));
+            JSONObject temp = create(iD, nodePort, containerPort, image);
+            mainObjArray = actionContainer(temp);
         }
         if (message.equals("setid")) {
             mainObjArray.put(actionId(iD));
@@ -63,14 +64,14 @@ class MessageBuilder {
         jo2.put(nodePort, containerPort);
 
         JSONObject jo3 = new JSONObject();
-        jo3.put("name", "container" + containerID);
+        jo3.put("name", containerID);
         jo3.put("environment", jo1);
         jo3.put("ports", jo2);
         jo3.put("image", image);
         jo3.put("detached", true);
 
         JSONObject jo4 = new JSONObject();
-        jo2.put("run", jo3);
+        jo4.put("run", jo3);
 
         return jo4;
     }
