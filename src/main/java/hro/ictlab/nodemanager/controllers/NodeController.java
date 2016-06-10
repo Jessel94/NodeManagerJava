@@ -69,12 +69,16 @@ public class NodeController {
         Connection conn = null;
         try {
             conn = dbConnector.getConnection();
+
             String output = hearthBeatHandler.readHeartBeat("145.24.222.140");
-            JSONObject jsnobject = new JSONObject(output);
-            JSONArray jsonArray = jsnobject.getJSONArray("containers");
-            ArrayList<DockerData> outputData = hearthBeatHandler.fillDockerData(jsonArray);
-            JSONArray jsArray = new JSONArray(outputData);
+            JSONObject outputJsonObject = new JSONObject(output);
+            JSONArray outputJsonArray = outputJsonObject.getJSONArray("containers");
+            ArrayList<DockerData> outputData = hearthBeatHandler.fillDockerData(outputJsonArray);
+
+            databaseHandler.updateContainerList(outputData, conn);
             databaseHandler.updateNode("11", conn);
+
+            JSONArray jsArray = new JSONArray(outputData);
             return Response.ok().entity(jsArray.toString()).build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,5 +90,13 @@ public class NodeController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @GET
+    @Path("/hb2/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNodeHb2() throws Exception {
+        String output = hearthBeatHandler.readHeartBeat("145.24.222.140");
+        return Response.ok().entity(output).build();
     }
 }

@@ -16,16 +16,6 @@ class GetData {
         return ps;
     }
 
-    PreparedStatement getQueues(Connection connection, String containerID) throws Exception {
-        PreparedStatement ps;
-        if (containerID == null) {
-            ps = connection.prepareStatement("SELECT id, hostname, queuename, queuepass FROM Queues");
-        } else {
-            ps = connection.prepareStatement("SELECT id, hostname, queuename, queuepass FROM Queues WHERE id = " + containerID);
-        }
-        return ps;
-    }
-
     PreparedStatement getNodes(Connection connection, String nodeID) throws Exception {
         PreparedStatement ps;
         if (nodeID == null) {

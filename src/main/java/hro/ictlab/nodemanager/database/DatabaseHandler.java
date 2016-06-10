@@ -1,5 +1,7 @@
 package hro.ictlab.nodemanager.database;
 
+import hro.ictlab.nodemanager.models.DockerData;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,11 +45,24 @@ public class DatabaseHandler {
         return Integer.toString(dataFormatter.containerData(rs).getQueueid());
     }
 
-    public void updateContainer(String containerId, String command, Connection conn) throws Exception {
+    public void updateContainer(String containerId, String command, Connection conn, boolean customStatus) throws Exception {
         Statement statement = updateData.getStatement(conn);
-        String newStatus = messageBuilder.generateMessage(command);
+        String newStatus = null;
+        if (!customStatus) {
+            newStatus = messageBuilder.generateMessage(command);
+        } else {
+            newStatus = command;
+        }
         String sql = updateData.containerStatus(containerId, newStatus);
         updateData.executeUpdate(statement, sql);
+    }
+
+    public void updateContainerList(ArrayList<DockerData> dockerDatas, Connection conn) throws Exception {
+        for (DockerData dockerData : dockerDatas) {
+            String containerId = dockerData.getContainerID();
+            String newStatus = dockerData.getStatus();
+            updateContainer(containerId, newStatus, conn, true);
+        }
     }
 
     public void updateNode(String queueId, Connection conn) throws Exception {
@@ -75,47 +90,8 @@ public class DatabaseHandler {
     }
 
     public boolean isCommandValid(String command) {
-        if (command.equals("start")) {
-            return true;
-        }
-        if (command.equals("stop")) {
-            return true;
-        }
-        if (command.equals("restart")) {
-            return true;
-        }
-        return false;
+        return command.equals("start") || command.equals("stop") || command.equals("restart");
     }
-
-    //Currently not used
-    /*
-    public String queueRequest(String id) throws Exception {
-        Connection conn = null;
-        String message = "No Data";
-        try {
-            conn = connector.getConnection();
-            PreparedStatement ps = getData.getQueues(conn, id);
-            ResultSet rs = getData.getResultSet(ps);
-            if (rs != null) {
-                ArrayList messageData = dataFormatter.queueFormatter(rs);
-                message = dataFormatter.gsonFormatter(messageData);
-            }
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        } finally {
-            try {
-                connector.closeConnection(conn);
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-        return message;
-    }
-    */
 
     //Currently not used
     /*

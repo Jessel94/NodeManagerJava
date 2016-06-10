@@ -2,7 +2,6 @@ package hro.ictlab.nodemanager.hearthbeat;
 
 import hro.ictlab.nodemanager.models.DockerData;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -59,24 +58,25 @@ public class HearthBeatHandler {
 
     private DockerData fillDockerData(JSONObject jsonObject) {
         DockerData dockerData = new DockerData();
-        // Deserialize json into object fields
-        try {
+        //temp bugfix until node works
+        if (jsonObject.has("NAMES") | jsonObject.has("PORTS")) {
+            String containerID = null;
+            if(jsonObject.has("PORTS")){
+                containerID = jsonObject.getString("PORTS");
+            }
             if(jsonObject.has("NAMES")){
-                String containerID = jsonObject.getString("NAMES");
-                String containerCheck = containerID.replaceAll("container", "");
-                if (isInteger(containerCheck)) {
-                    dockerData.setStatus(jsonObject.getString("STATUS"));
-                    dockerData.setContainerID(containerCheck);
-                }
-                else {
-                    return null;
-                }
+                containerID = jsonObject.getString("NAMES");
+            }
+            String containerCheck = containerID.replaceAll("container", "");
+            if (isInteger(containerCheck)) {
+                dockerData.setStatus(jsonObject.getString("STATUS"));
+                dockerData.setContainerID(containerCheck);
             }
             else {
                 return null;
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        }
+        else {
             return null;
         }
         // Return new object

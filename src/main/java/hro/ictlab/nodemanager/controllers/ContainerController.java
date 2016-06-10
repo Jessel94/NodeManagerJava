@@ -74,7 +74,7 @@ public class ContainerController {
                 rabbitChannel = rabbitConnector.getChannel(rabbitConn);
                 String queueId = databaseHandler.containerQueueID(containerId, dbConn);
                 String output = rabbitmqHandler.processCommand(containerId, queueId, command, rabbitChannel);
-                databaseHandler.updateContainer(containerId, command, dbConn);
+                databaseHandler.updateContainer(containerId, command, dbConn, false);
                 return Response.ok().entity(output).build();
             }
             return Response.serverError().build();

@@ -12,7 +12,8 @@ public class RabbitmqHandler {
     private final RabbitApi rabbitApi = new RabbitApi();
 
     public String processCommand(String containerID, String queueId, String message, Channel channel) throws Exception {
-        String messageArray = messageBuilder.main(containerID, message, null, null);
+        String containerId = "container" + containerID;
+        String messageArray = messageBuilder.main(containerId, message, null, null);
         return send.startStopRestart(queueId, messageArray, channel);
     }
 
