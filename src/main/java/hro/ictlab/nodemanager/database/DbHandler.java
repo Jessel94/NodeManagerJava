@@ -44,13 +44,13 @@ public class DbHandler {
     public String containerQueueID(String containerId, Connection conn) throws Exception {
         PreparedStatement ps = getData.getContainers(conn, containerId);
         ResultSet rs = getData.getResultSet(ps);
-        return Integer.toString(dataFormatter.containerData(rs).getQueueid());
+        return Integer.toString(dataFormatter.containerData(rs).getQueueId());
     }
 
     public String nodeQueueID(String nodeIp, Connection conn) throws Exception {
         PreparedStatement ps = getData.getNodes(conn, null, nodeIp);
         ResultSet rs = getData.getResultSet(ps);
-        return Integer.toString(dataFormatter.nodeData(rs).getQueueid());
+        return Integer.toString(dataFormatter.nodeData(rs).getQueueId());
     }
 
     public ArrayList<Node> nodeList(Connection conn) throws Exception {
@@ -98,8 +98,8 @@ public class DbHandler {
         return queueID;
     }
 
-    public String newContainer(String name, String state, String queueId, Connection conn) throws Exception {
-        PreparedStatement ps = insertData.newContainer(conn, name, state, queueId);
+    public String newContainer(String name, String queueId, Connection conn) throws Exception {
+        PreparedStatement ps = insertData.newContainer(conn, name, "Starting", queueId);
         ResultSet rs = insertData.getResultSet(ps);
         return Integer.toString(dataFormatter.containerDataSql(rs).getId());
     }

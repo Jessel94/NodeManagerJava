@@ -4,33 +4,17 @@ class MessageBuilder {
 
     String generateMessage(String command) {
         if (command.equals("start")) {
-            return generateStart();
+            return "Starting";
         }
         if (command.equals("stop")) {
-            return generateStop();
+            return "Stopping";
         }
         if (command.equals("restart")) {
-            return generateRestart();
+            return "Restarting";
         }
         if (command.equals("delete")) {
-            return generateDelete();
+            return "Deleting";
         }
         return null;
-    }
-
-    private String generateStart() {
-        return "Starting";
-    }
-
-    private String generateStop() {
-        return "Stopping";
-    }
-
-    private String generateRestart() {
-        return "Restarting";
-    }
-
-    private String generateDelete() {
-        return "Deleting";
     }
 }

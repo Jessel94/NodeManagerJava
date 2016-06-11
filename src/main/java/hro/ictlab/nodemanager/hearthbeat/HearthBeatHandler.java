@@ -27,20 +27,20 @@ public class HearthBeatHandler {
     public String readHeartBeat(String ip) throws Exception {
         HttpURLConnection conn = (HttpURLConnection) new URL("http://" + ip + ":53452").openConnection();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try(InputStream in = conn.getInputStream()) {
+        try (InputStream in = conn.getInputStream()) {
             byte[] buffer = new byte[2048];
             int read;
-            while((read = in.read(buffer)) > 0) {
+            while ((read = in.read(buffer)) > 0) {
                 out.write(buffer, 0, read);
             }
         }
         return out.toString();
     }
 
-    public ArrayList<DockerData> fillDockerData(JSONArray jsonArray) throws Exception {
+    public ArrayList<DockerData> fillDockerData(JSONArray jsonArray) {
         JSONObject dockerJson;
         ArrayList<DockerData> dockerDatas = new ArrayList<>(jsonArray.length());
-        for (int i=0; i < jsonArray.length(); i++) {
+        for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 dockerJson = jsonArray.getJSONObject(i);
             } catch (Exception e) {
@@ -61,22 +61,20 @@ public class HearthBeatHandler {
         //temp bugfix until node works
         if (jsonObject.has("NAMES") | jsonObject.has("PORTS")) {
             String containerID = null;
-            if(jsonObject.has("PORTS")){
+            if (jsonObject.has("PORTS")) {
                 containerID = jsonObject.getString("PORTS");
             }
-            if(jsonObject.has("NAMES")){
+            if (jsonObject.has("NAMES")) {
                 containerID = jsonObject.getString("NAMES");
             }
             String containerCheck = containerID.replaceAll("container", "");
             if (isInteger(containerCheck)) {
                 dockerData.setStatus(jsonObject.getString("STATUS"));
                 dockerData.setContainerID(containerCheck);
-            }
-            else {
+            } else {
                 return null;
             }
-        }
-        else {
+        } else {
             return null;
         }
         // Return new object

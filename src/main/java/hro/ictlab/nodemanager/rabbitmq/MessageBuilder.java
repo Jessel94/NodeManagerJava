@@ -5,42 +5,42 @@ import org.json.JSONObject;
 
 class MessageBuilder {
 
-    String buildMessage(String iD, String message, String userName, String passWord, String nodePort, String containerPort, String image) {
+    String buildMessage(String id, String message, String userName, String passWord, String nodePort, String containerPort, String image) {
         JSONArray mainObjArray = new JSONArray();
         if (message.equals("start")) {
-            mainObjArray = actionContainer(start(iD));
+            mainObjArray = actionContainer(start(id));
         }
         if (message.equals("stop")) {
-            mainObjArray = actionContainer(stop(iD));
+            mainObjArray = actionContainer(stop(id));
         }
         if (message.equals("restart")) {
-            mainObjArray = actionContainer(restart(iD));
+            mainObjArray = actionContainer(restart(id));
         }
         if (message.equals("delete")) {
-            mainObjArray = actionContainer(delete(iD));
+            mainObjArray = actionContainer(delete(id));
         }
         if (message.equals("create")) {
-            JSONObject temp = create(iD, nodePort, containerPort, image);
+            JSONObject temp = create(id, nodePort, containerPort, image);
             mainObjArray = actionContainer(temp);
         }
         if (message.equals("setid")) {
-            mainObjArray.put(actionId(iD));
-            mainObjArray.put(actionConnect(rabbitMQ(iD, userName, passWord)));
+            mainObjArray.put(actionId(id));
+            mainObjArray.put(actionConnect(rabbitMQ(id, userName, passWord)));
         }
 
         return mainObjArray.toString();
     }
 
-    private JSONObject start(String containerID) {
+    private JSONObject start(String containerId) {
         JSONObject jo2 = new JSONObject();
-        jo2.put("start", containerID);
+        jo2.put("start", containerId);
 
         return jo2;
     }
 
-    private JSONObject stop(String containerID) {
+    private JSONObject stop(String containerId) {
         JSONObject jo1 = new JSONObject();
-        jo1.put("container", containerID);
+        jo1.put("container", containerId);
         jo1.put("time", "60");
 
         JSONObject jo2 = new JSONObject();
@@ -49,9 +49,9 @@ class MessageBuilder {
         return jo2;
     }
 
-    private JSONObject restart(String containerID) {
+    private JSONObject restart(String containerId) {
         JSONObject jo1 = new JSONObject();
-        jo1.put("container", containerID);
+        jo1.put("container", containerId);
         jo1.put("time", "60");
 
         JSONObject jo2 = new JSONObject();
@@ -60,9 +60,9 @@ class MessageBuilder {
         return jo2;
     }
 
-    private JSONObject delete(String containerID) {
+    private JSONObject delete(String containerId) {
         JSONObject jo1 = new JSONObject();
-        jo1.put("container", containerID);
+        jo1.put("container", containerId);
         jo1.put("force", true);
 
         JSONObject jo2 = new JSONObject();
@@ -71,14 +71,14 @@ class MessageBuilder {
         return jo2;
     }
 
-    private JSONObject create(String containerID, String nodePort, String containerPort, String image) {
+    private JSONObject create(String containerId, String nodePort, String containerPort, String image) {
         JSONObject jo1 = new JSONObject();
 
         JSONObject jo2 = new JSONObject();
         jo2.put(nodePort, containerPort);
 
         JSONObject jo3 = new JSONObject();
-        jo3.put("name", containerID);
+        jo3.put("name", containerId);
         jo3.put("environment", jo1);
         jo3.put("ports", jo2);
         jo3.put("image", image);

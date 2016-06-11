@@ -23,39 +23,20 @@ public class NewContainer {
         return containerName;
     }
 
-    public void setContainerName(String containerName) {
-        this.containerName = containerName;
-    }
-
     public String getNode() {
         return node;
-    }
-
-    public void setNode(String node) {
-        this.node = node;
     }
 
     public String getBaseImage() {
         return baseImage;
     }
 
-    public void setBaseImage(String baseImage) {
-        this.baseImage = baseImage;
-    }
-
     public String getHostPort() {
         return hostPort;
-    }
-
-    public void setHostPort(String hostPort) {
-        this.hostPort = hostPort;
     }
 
     public String getContainerPort() {
         return containerPort;
     }
 
-    public void setContainerPort(String containerPort) {
-        this.containerPort = containerPort;
-    }
 }

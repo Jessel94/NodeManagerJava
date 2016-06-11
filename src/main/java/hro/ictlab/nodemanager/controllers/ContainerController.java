@@ -79,10 +79,10 @@ public class ContainerController {
                 rabbitChannel = rabbitConnector.getChannel(rabbitConn);
 
                 String queueId = dbHandler.containerQueueID(containerId, dbConn);
-                String output = rabbitHandler.processCommand(containerId, queueId, command, rabbitChannel, null, null, null);
+                rabbitHandler.processCommand(containerId, queueId, command, rabbitChannel, null, null, null);
                 dbHandler.updateContainer(containerId, command, dbConn, false);
 
-                return Response.ok().entity(output).build();
+                return Response.ok().build();
             }
             return Response.serverError().build();
         } catch (Exception e) {
@@ -111,10 +111,10 @@ public class ContainerController {
             rabbitChannel = rabbitConnector.getChannel(rabbitConn);
 
             String queueId = dbHandler.containerQueueID(containerId, dbConn);
-            String output = rabbitHandler.processCommand(containerId, queueId, "delete", rabbitChannel, null, null, null);
+            rabbitHandler.processCommand(containerId, queueId, "delete", rabbitChannel, null, null, null);
             dbHandler.deleteContainer(containerId, dbConn);
 
-            return Response.ok(output).build();
+            return Response.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError().build();
@@ -128,6 +128,7 @@ public class ContainerController {
         }
     }
 
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newContainer(@Context HttpServletRequest request, @Context HttpServletResponse response) throws Exception {
@@ -135,7 +136,7 @@ public class ContainerController {
         Connection dbConn = null;
         com.rabbitmq.client.Connection rabbitConn = null;
         Channel rabbitChannel = null;
-        try{
+        try {
             body = request.getInputStream();
             dbConn = dbConnector.getConnection();
             rabbitConn = rabbitConnector.getConnection();
@@ -143,17 +144,17 @@ public class ContainerController {
 
             NewContainer requestModel = postDataFormatter.formatNewContainer(body);
             String queueId = dbHandler.nodeQueueID(requestModel.getNode(), dbConn);
-            String containerId = dbHandler.newContainer(requestModel.getContainerName(), "Starting", queueId, dbConn);
-            String output = rabbitHandler.processCommand(containerId, queueId, "create", rabbitChannel, requestModel.getHostPort(), requestModel.getContainerPort(), requestModel.getBaseImage());
+            String containerId = dbHandler.newContainer(requestModel.getContainerName(), queueId, dbConn);
+            rabbitHandler.processCommand(containerId, queueId, "create", rabbitChannel, requestModel.getHostPort(), requestModel.getContainerPort(), requestModel.getBaseImage());
 
-            return Response.ok(output).build();
+            return Response.ok().build();
 
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError().build();
         } finally {
             try {
-                if(body != null){
+                if (body != null) {
                     body.close();
                 }
                 dbConnector.closeConnection(dbConn);

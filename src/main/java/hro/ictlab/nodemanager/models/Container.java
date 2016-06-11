@@ -4,9 +4,9 @@ import java.sql.Timestamp;
 
 public class Container {
     private int id;
-    private int queueid;
+    private int queueId;
     private String name;
-    private Timestamp creationdate;
+    private Timestamp creationDate;
     private String state;
 
     public int getId() {
@@ -17,32 +17,20 @@ public class Container {
         this.id = id;
     }
 
-    public int getQueueid() {
-        return queueid;
+    public int getQueueId() {
+        return queueId;
     }
 
-    public void setQueueid(int queueid) {
-        this.queueid = queueid;
-    }
-
-    public String getName() {
-        return name;
+    public void setQueueId(int queueId) {
+        this.queueId = queueId;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public Timestamp getCreationdate() {
-        return creationdate;
-    }
-
-    public void setCreationdate(Timestamp creationdate) {
-        this.creationdate = creationdate;
-    }
-
-    public String getState() {
-        return state;
+    public void setCreationDate(Timestamp creationDate) {
+        this.creationDate = creationDate;
     }
 
     public void setState(String state) {

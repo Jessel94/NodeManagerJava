@@ -4,18 +4,21 @@ import java.sql.Timestamp;
 
 public class Node {
     private int id;
+    private String name;
+    private Timestamp lastChecked;
+    private int queueId;
 
     public String getName() {
         return name;
     }
 
-    public Timestamp getLastchecked() {
-        return lastchecked;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    private String name;
-    private Timestamp lastchecked;
-    private int queueid;
+    public void setLastChecked(Timestamp lastChecked) {
+        this.lastChecked = lastChecked;
+    }
 
     public int getId() {
         return id;
@@ -25,19 +28,11 @@ public class Node {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getQueueId() {
+        return queueId;
     }
 
-    public void setLastchecked(Timestamp lastchecked) {
-        this.lastchecked = lastchecked;
-    }
-
-    public int getQueueid() {
-        return queueid;
-    }
-
-    public void setQueueid(int queueid) {
-        this.queueid = queueid;
+    public void setQueueId(int queueId) {
+        this.queueId = queueId;
     }
 }

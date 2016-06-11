@@ -5,11 +5,11 @@ import java.sql.Statement;
 
 class UpdateData {
 
-    String containerStatus(String containerID, String newStatus) throws Exception {
+    String containerStatus(String containerID, String newStatus) {
         return ("UPDATE Containers SET state='" + newStatus + "' WHERE id = " + containerID);
     }
 
-    String nodeStatus(String queueid) throws Exception {
+    String nodeStatus(String queueid) {
         return ("UPDATE Nodes SET lastchecked = NULL WHERE queueid = " + queueid);
     }
 

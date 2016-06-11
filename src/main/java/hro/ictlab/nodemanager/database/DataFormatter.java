@@ -35,28 +35,19 @@ class DataFormatter {
     private Container fillContainer(ResultSet rs) throws Exception {
         Container container = new Container();
         container.setId(rs.getInt("id"));
-        container.setQueueid(rs.getInt("queueid"));
+        container.setQueueId(rs.getInt("queueid"));
         container.setName(rs.getString("name"));
-        container.setCreationdate(rs.getTimestamp("creationdate"));
+        container.setCreationDate(rs.getTimestamp("creationdate"));
         container.setState(rs.getString("state"));
         return container;
-    }
-
-    private Queue fillQueue(ResultSet rs) throws Exception {
-        Queue queue = new Queue();
-        queue.setId(rs.getInt("id"));
-        queue.setHostname(rs.getString("hostname"));
-        queue.setQueuename(rs.getString("queuename"));
-        queue.setQueuepass(rs.getString("queuepass"));
-        return queue;
     }
 
     private Node fillNode(ResultSet rs) throws Exception {
         Node node = new Node();
         node.setId(rs.getInt("id"));
         node.setName(rs.getString("name"));
-        node.setQueueid(rs.getInt("queueid"));
-        node.setLastchecked(rs.getTimestamp("lastchecked"));
+        node.setQueueId(rs.getInt("queueid"));
+        node.setLastChecked(rs.getTimestamp("lastchecked"));
         return node;
     }
 

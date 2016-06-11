@@ -5,7 +5,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 public class RabbitApiConnector {
 
-    public CloseableHttpClient getConnection() throws Exception {
+    public CloseableHttpClient getConnection() {
         return HttpClientBuilder.create().build();
     }
 

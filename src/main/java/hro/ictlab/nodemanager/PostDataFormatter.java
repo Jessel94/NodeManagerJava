@@ -11,16 +11,14 @@ public class PostDataFormatter {
 
     private final Gson gson = new Gson();
 
-    public NewContainer formatNewContainer(InputStream body) throws Exception{
+    public NewContainer formatNewContainer(InputStream body) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(body));
 
-        StringBuffer jb = new StringBuffer();
+        StringBuilder jb = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null)
             jb.append(line);
 
-        NewContainer newContainers = gson.fromJson(jb.toString(), NewContainer.class);
-
-        return newContainers;
+        return gson.fromJson(jb.toString(), NewContainer.class);
     }
 }
