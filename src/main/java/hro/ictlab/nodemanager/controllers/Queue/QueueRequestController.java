@@ -19,7 +19,7 @@ import javax.ws.rs.core.SecurityContext;
 import java.sql.Connection;
 
 @Path("/queues/")
-public class QueueController {
+public class QueueRequestController {
 
     private final RabbitHandler rabbitHandler = new RabbitHandler();
     private final DbHandler dbHandler = new DbHandler();
