@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.rabbitmq;
+package hro.ictlab.nodemanager.connectors;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;

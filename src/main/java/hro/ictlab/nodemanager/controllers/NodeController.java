@@ -1,12 +1,10 @@
 package hro.ictlab.nodemanager.controllers;
 
-import hro.ictlab.nodemanager.database.DbConnector;
+import hro.ictlab.nodemanager.connectors.DbConnector;
 import hro.ictlab.nodemanager.database.DbHandler;
 import hro.ictlab.nodemanager.hearthbeat.HearthBeatHandler;
 import hro.ictlab.nodemanager.models.DockerData;
 import hro.ictlab.nodemanager.models.Node;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -75,10 +73,7 @@ public class NodeController {
                 String ip = node.getName();
                 String queueId = String.valueOf(node.getQueueId());
 
-                String output = hearthBeatHandler.readHeartBeat(ip);
-                JSONObject outputJsonObject = new JSONObject(output);
-                JSONArray outputJsonArray = outputJsonObject.getJSONArray("containers");
-                ArrayList<DockerData> outputData = hearthBeatHandler.fillDockerData(outputJsonArray);
+                ArrayList<DockerData> outputData = hearthBeatHandler.handleHearthBeat(ip);
 
                 dbHandler.updateContainerList(outputData, conn);
                 dbHandler.updateNode(queueId, conn);

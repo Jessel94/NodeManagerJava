@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.database;
+package hro.ictlab.nodemanager.connectors;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

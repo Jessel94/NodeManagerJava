@@ -1,8 +1,7 @@
-package hro.ictlab.nodemanager.database;
+package hro.ictlab.nodemanager.database.data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.Statement;
 
 class InsertData {
@@ -29,23 +28,13 @@ class InsertData {
         return ps;
     }
 
-    PreparedStatement newNode(Connection connection, String name, int queueID) throws Exception {
+    PreparedStatement newNode(Connection connection, String ip, int queueID) throws Exception {
         PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO Nodes (id, name, queueid, lastchecked)" +
                         " VALUES (NULL, ?, ?, NULL)"
         );
-        ps.setString(1, name);
+        ps.setString(1, ip);
         ps.setInt(2, queueID);
         return ps;
-    }
-
-    PreparedStatement executeStatement(PreparedStatement ps) throws Exception {
-        ps.execute();
-        return ps;
-    }
-
-    ResultSet getResultSet(PreparedStatement ps) throws Exception {
-        ps = executeStatement(ps);
-        return ps.getGeneratedKeys();
     }
 }

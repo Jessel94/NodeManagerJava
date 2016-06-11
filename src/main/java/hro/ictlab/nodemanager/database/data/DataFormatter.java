@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.database;
+package hro.ictlab.nodemanager.database.data;
 
 import com.google.gson.Gson;
 import hro.ictlab.nodemanager.models.Container;
@@ -8,11 +8,11 @@ import hro.ictlab.nodemanager.models.Queue;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-class DataFormatter {
+public class DataFormatter {
 
     private final Gson gson = new Gson();
 
-    ArrayList<Container> containerFormatter(ResultSet rs) throws Exception {
+    public ArrayList<Container> containerFormatter(ResultSet rs) throws Exception {
         ArrayList<Container> messageData = new ArrayList<>();
         while (rs.next()) {
             Container container = fillContainer(rs);
@@ -22,7 +22,7 @@ class DataFormatter {
         return messageData;
     }
 
-    ArrayList<Node> nodeFormatter(ResultSet rs) throws Exception {
+    public ArrayList<Node> nodeFormatter(ResultSet rs) throws Exception {
         ArrayList<Node> messageData = new ArrayList<>();
         while (rs.next()) {
             Node node = fillNode(rs);
@@ -51,7 +51,7 @@ class DataFormatter {
         return node;
     }
 
-    Container containerData(ResultSet rs) throws Exception {
+    public Container containerData(ResultSet rs) throws Exception {
         if (rs.next()) {
             Container container = fillContainer(rs);
             rs.close();
@@ -61,7 +61,7 @@ class DataFormatter {
         }
     }
 
-    Node nodeData(ResultSet rs) throws Exception {
+    public Node nodeData(ResultSet rs) throws Exception {
         if (rs.next()) {
             Node node = fillNode(rs);
             rs.close();
@@ -72,7 +72,7 @@ class DataFormatter {
     }
 
 
-    Queue queueDataSql(ResultSet rs) throws Exception {
+    public Queue queueDataSql(ResultSet rs) throws Exception {
         if (rs.next()) {
             Queue queue = new Queue();
             queue.setId(rs.getInt(1));
@@ -83,7 +83,7 @@ class DataFormatter {
         }
     }
 
-    Container containerDataSql(ResultSet rs) throws Exception {
+    public Container containerDataSql(ResultSet rs) throws Exception {
         if (rs.next()) {
             Container container = new Container();
             container.setId(rs.getInt(1));
@@ -94,7 +94,7 @@ class DataFormatter {
         }
     }
 
-    String gsonFormatter(ArrayList arrayList) {
+    public String gsonFormatter(ArrayList arrayList) {
         return gson.toJson(arrayList);
     }
 }

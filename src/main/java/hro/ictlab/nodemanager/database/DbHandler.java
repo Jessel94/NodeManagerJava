@@ -1,5 +1,7 @@
 package hro.ictlab.nodemanager.database;
 
+import hro.ictlab.nodemanager.database.data.DataFormatter;
+import hro.ictlab.nodemanager.database.data.DataHandler;
 import hro.ictlab.nodemanager.models.DockerData;
 import hro.ictlab.nodemanager.models.Node;
 
@@ -11,18 +13,15 @@ import java.util.ArrayList;
 
 public class DbHandler {
 
-    private final GetData getData = new GetData();
-    private final UpdateData updateData = new UpdateData();
     private final DataFormatter dataFormatter = new DataFormatter();
-    private final InsertData insertData = new InsertData();
-    private final DeleteData deleteData = new DeleteData();
     private final MessageBuilder messageBuilder = new MessageBuilder();
+    private final DataHandler dataHandler = new DataHandler();
 
 
     public String containerRequest(String containerId, Connection conn) throws Exception {
         String result = "No Data";
-        PreparedStatement ps = getData.getContainers(conn, containerId);
-        ResultSet rs = getData.getResultSet(ps);
+        PreparedStatement ps = dataHandler.getContainers(conn, containerId);
+        ResultSet rs = dataHandler.getResultSet(ps);
         if (isResultSetNotEmpty(rs)) {
             ArrayList messageData = dataFormatter.containerFormatter(rs);
             result = dataFormatter.gsonFormatter(messageData);
@@ -32,8 +31,8 @@ public class DbHandler {
 
     public String nodeRequest(String nodeId, Connection conn) throws Exception {
         String result = "No Data";
-        PreparedStatement ps = getData.getNodes(conn, nodeId, null);
-        ResultSet rs = getData.getResultSet(ps);
+        PreparedStatement ps = dataHandler.getNodes(conn, nodeId, null);
+        ResultSet rs = dataHandler.getResultSet(ps);
         if (isResultSetNotEmpty(rs)) {
             ArrayList messageData = dataFormatter.nodeFormatter(rs);
             result = dataFormatter.gsonFormatter(messageData);
@@ -42,21 +41,21 @@ public class DbHandler {
     }
 
     public String containerQueueID(String containerId, Connection conn) throws Exception {
-        PreparedStatement ps = getData.getContainers(conn, containerId);
-        ResultSet rs = getData.getResultSet(ps);
+        PreparedStatement ps = dataHandler.getContainers(conn, containerId);
+        ResultSet rs = dataHandler.getResultSet(ps);
         return Integer.toString(dataFormatter.containerData(rs).getQueueId());
     }
 
     public String nodeQueueID(String nodeIp, Connection conn) throws Exception {
-        PreparedStatement ps = getData.getNodes(conn, null, nodeIp);
-        ResultSet rs = getData.getResultSet(ps);
+        PreparedStatement ps = dataHandler.getNodes(conn, null, nodeIp);
+        ResultSet rs = dataHandler.getResultSet(ps);
         return Integer.toString(dataFormatter.nodeData(rs).getQueueId());
     }
 
     public ArrayList<Node> nodeList(Connection conn) throws Exception {
         ArrayList<Node> result = null;
-        PreparedStatement ps = getData.getNodes(conn, null, null);
-        ResultSet rs = getData.getResultSet(ps);
+        PreparedStatement ps = dataHandler.getNodes(conn, null, null);
+        ResultSet rs = dataHandler.getResultSet(ps);
         if (isResultSetNotEmpty(rs)) {
             result = dataFormatter.nodeFormatter(rs);
         }
@@ -64,15 +63,15 @@ public class DbHandler {
     }
 
     public void updateContainer(String containerId, String command, Connection conn, boolean customStatus) throws Exception {
-        Statement statement = updateData.getStatement(conn);
+        Statement statement = dataHandler.getStatement(conn);
         String newStatus;
         if (!customStatus) {
-            newStatus = messageBuilder.generateMessage(command);
+            newStatus = MessageBuilder.generateMessage(command);
         } else {
             newStatus = command;
         }
-        String sql = updateData.containerStatus(containerId, newStatus);
-        updateData.executeUpdate(statement, sql);
+        String sql = dataHandler.containerStatus(containerId, newStatus);
+        dataHandler.executeUpdate(statement, sql);
     }
 
     public void updateContainerList(ArrayList<DockerData> dockerDatas, Connection conn) throws Exception {
@@ -84,29 +83,29 @@ public class DbHandler {
     }
 
     public void updateNode(String queueId, Connection conn) throws Exception {
-        Statement statement = updateData.getStatement(conn);
-        String sql = updateData.nodeStatus(queueId);
-        updateData.executeUpdate(statement, sql);
+        Statement statement = dataHandler.getStatement(conn);
+        String sql = dataHandler.nodeStatus(queueId);
+        dataHandler.executeUpdate(statement, sql);
     }
 
     public int newQueue(String hostName, String userName, String passWord, String ip, Connection conn) throws Exception {
-        PreparedStatement ps = insertData.newQueue(conn, hostName, userName, passWord);
-        ResultSet rs = insertData.getResultSet(ps);
+        PreparedStatement ps = dataHandler.newQueue(conn, hostName, userName, passWord);
+        ResultSet rs = dataHandler.insertResultSet(ps);
         int queueID = dataFormatter.queueDataSql(rs).getId();
-        ps = insertData.newNode(conn, ip, queueID);
-        insertData.executeStatement(ps);
+        ps = dataHandler.newNode(conn, ip, queueID);
+        dataHandler.executeStatement(ps);
         return queueID;
     }
 
     public String newContainer(String name, String queueId, Connection conn) throws Exception {
-        PreparedStatement ps = insertData.newContainer(conn, name, "Starting", queueId);
-        ResultSet rs = insertData.getResultSet(ps);
+        PreparedStatement ps = dataHandler.newContainer(conn, name, "Starting", queueId);
+        ResultSet rs = dataHandler.insertResultSet(ps);
         return Integer.toString(dataFormatter.containerDataSql(rs).getId());
     }
 
     public void deleteContainer(String containerId, Connection conn) throws Exception {
-        PreparedStatement ps = deleteData.deleteContainer(conn, containerId);
-        deleteData.executeStatement(ps);
+        PreparedStatement ps = dataHandler.deleteContainer(conn, containerId);
+        dataHandler.executeStatement(ps);
     }
 
     private boolean isResultSetNotEmpty(ResultSet rs) throws Exception {

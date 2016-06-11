@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager;
+package hro.ictlab.nodemanager.helperclasses;
 
 import com.google.gson.Gson;
 import hro.ictlab.nodemanager.models.NewContainer;

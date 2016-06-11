@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.rabbitmq;
+package hro.ictlab.nodemanager.connectors;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

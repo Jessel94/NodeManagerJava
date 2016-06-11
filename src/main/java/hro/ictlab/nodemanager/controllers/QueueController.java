@@ -1,10 +1,10 @@
 package hro.ictlab.nodemanager.controllers;
 
 import com.rabbitmq.client.Channel;
-import hro.ictlab.nodemanager.database.DbConnector;
+import hro.ictlab.nodemanager.connectors.DbConnector;
+import hro.ictlab.nodemanager.connectors.RabbitApiConnector;
+import hro.ictlab.nodemanager.connectors.RabbitConnector;
 import hro.ictlab.nodemanager.database.DbHandler;
-import hro.ictlab.nodemanager.rabbitmq.RabbitApiConnector;
-import hro.ictlab.nodemanager.rabbitmq.RabbitConnector;
 import hro.ictlab.nodemanager.rabbitmq.RabbitHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 
