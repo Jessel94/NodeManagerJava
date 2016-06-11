@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.controllers;
+package hro.ictlab.nodemanager.controllers.Queue;
 
 import com.rabbitmq.client.Channel;
 import hro.ictlab.nodemanager.connectors.DbConnector;
