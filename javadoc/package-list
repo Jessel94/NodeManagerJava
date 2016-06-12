@@ -1,0 +1,11 @@
+hro.ictlab.nodemanager
+hro.ictlab.nodemanager.connectors
+hro.ictlab.nodemanager.controllers.container
+hro.ictlab.nodemanager.controllers.node
+hro.ictlab.nodemanager.controllers.queue
+hro.ictlab.nodemanager.database
+hro.ictlab.nodemanager.database.data
+hro.ictlab.nodemanager.hearthbeat
+hro.ictlab.nodemanager.helperclasses
+hro.ictlab.nodemanager.models
+hro.ictlab.nodemanager.rabbitmq
