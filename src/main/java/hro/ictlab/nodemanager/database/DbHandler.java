@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class DbHandler {
 
     private final DataFormatter dataFormatter = new DataFormatter();
-    private final MessageBuilder messageBuilder = new MessageBuilder();
     private final DataHandler dataHandler = new DataHandler();
 
 
