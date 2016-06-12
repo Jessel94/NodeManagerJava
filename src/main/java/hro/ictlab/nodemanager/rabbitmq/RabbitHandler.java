@@ -3,6 +3,9 @@ package hro.ictlab.nodemanager.rabbitmq;
 import com.rabbitmq.client.Channel;
 import org.apache.http.impl.client.CloseableHttpClient;
 
+/**
+ * Class that is used to handle all methods relating to rabbitMQ
+ */
 public class RabbitHandler {
 
     private final Send send = new Send();
@@ -11,12 +14,18 @@ public class RabbitHandler {
     private final RabbitGenerator rabbitGenerator = new RabbitGenerator();
     private final RabbitApi rabbitApi = new RabbitApi();
 
+    /**
+     * Method processes and sends the command to the specified Queue
+     */
     public void processCommand(String containerID, String queueId, String message, Channel channel, String nodePort, String containerPort, String image) throws Exception {
         String containerId = "container" + containerID;
         String messageArray = messageBuilder.buildMessage(containerId, message, null, null, nodePort, containerPort, image);
         send.sendMessage(queueId, messageArray, channel);
     }
 
+    /**
+     * Method processes and sends the command to the specified Queue
+     */
     public String requestQueue(int queueID, String userName, String passWord, Channel channel) throws Exception {
         String result = queue.newQueue(channel, queueID);
         return messageBuilder.buildMessage(result, "setid", userName, passWord, null, null, null);
@@ -30,6 +39,9 @@ public class RabbitHandler {
         return rabbitGenerator.generatePass();
     }
 
+    /**
+     * Method to create a new user in rabbitMQ
+     */
     public void createUser(String userName, String passWord, CloseableHttpClient client) throws Exception {
         rabbitApi.createUser(userName, passWord, client);
         rabbitApi.userPermissions(userName, client);

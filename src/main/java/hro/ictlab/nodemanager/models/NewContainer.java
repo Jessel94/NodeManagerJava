@@ -2,6 +2,9 @@ package hro.ictlab.nodemanager.models;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Model that is used for the NewContainer POST request
+ */
 public class NewContainer {
 
     @SerializedName("containerName")

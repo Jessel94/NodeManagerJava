@@ -1,5 +1,8 @@
 package hro.ictlab.nodemanager.models;
 
+/**
+ * Model that is used for DockerData
+ */
 public class DockerData {
     private String containerID;
     private String status;

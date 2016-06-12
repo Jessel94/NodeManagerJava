@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.controllers.Container;
+package hro.ictlab.nodemanager.controllers.container;
 
 import com.rabbitmq.client.Channel;
 import hro.ictlab.nodemanager.connectors.DbConnector;
@@ -19,6 +19,9 @@ import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.sql.Connection;
 
+/**
+ * Class that is used to handle the new containers
+ */
 @Path("/containers/")
 public class ContainerPostController {
 
@@ -28,6 +31,12 @@ public class ContainerPostController {
     private final RabbitConnector rabbitConnector = new RabbitConnector();
     private final PostDataFormatter postDataFormatter = new PostDataFormatter();
 
+    /**
+     * Method used to create a new container using the input received
+     *
+     * @param request The request holds all the information for the new container, this get extracted and used to create said new container.
+     * @return Returns a OK if the command is succesfully processed, otherwise returns a serverError.
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newContainer(@Context HttpServletRequest request, @Context HttpServletResponse response) throws Exception {
@@ -36,11 +45,15 @@ public class ContainerPostController {
         com.rabbitmq.client.Connection rabbitConn = null;
         Channel rabbitChannel = null;
         try {
+            //Getting the inputStream
             body = request.getInputStream();
+
+            //Starting up all the required connections
             dbConn = dbConnector.getConnection();
             rabbitConn = rabbitConnector.getConnection();
             rabbitChannel = rabbitConnector.getChannel(rabbitConn);
 
+            //Handling the creation of the new container
             NewContainer requestModel = postDataFormatter.formatNewContainer(body);
             String queueId = dbHandler.nodeQueueID(requestModel.getNode(), dbConn);
             String containerId = dbHandler.newContainer(requestModel.getContainerName(), queueId, dbConn);
@@ -53,6 +66,7 @@ public class ContainerPostController {
             return Response.serverError().build();
         } finally {
             try {
+                //Close all connections if open
                 if (body != null) {
                     body.close();
                 }

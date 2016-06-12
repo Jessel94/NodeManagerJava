@@ -2,6 +2,9 @@ package hro.ictlab.nodemanager.models;
 
 import java.sql.Timestamp;
 
+/**
+ * Model that is used for container data
+ */
 public class Container {
     private int id;
     private int queueId;

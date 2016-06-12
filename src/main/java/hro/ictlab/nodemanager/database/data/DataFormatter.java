@@ -8,6 +8,9 @@ import hro.ictlab.nodemanager.models.Queue;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+/**
+ * This class is used to format all data coming from the database to a readable format for other parts of the NodeManager.
+ */
 public class DataFormatter {
 
     private final Gson gson = new Gson();
@@ -70,7 +73,6 @@ public class DataFormatter {
             return null;
         }
     }
-
 
     public Queue queueDataSql(ResultSet rs) throws Exception {
         if (rs.next()) {

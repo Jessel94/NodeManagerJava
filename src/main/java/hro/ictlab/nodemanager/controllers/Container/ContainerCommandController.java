@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.controllers.Container;
+package hro.ictlab.nodemanager.controllers.container;
 
 import com.rabbitmq.client.Channel;
 import hro.ictlab.nodemanager.connectors.DbConnector;
@@ -14,6 +14,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.Connection;
 
+/**
+ * Class that is used to handle the commands for the containers
+ */
 @Path("/containers/")
 public class ContainerCommandController {
 
@@ -23,6 +26,13 @@ public class ContainerCommandController {
     private final RabbitConnector rabbitConnector = new RabbitConnector();
 
 
+    /**
+     * Method used to send a command to a specific container
+     *
+     * @param containerId The id of the container you would like to issue a command to.
+     * @param command     The command you would like to send tot the container
+     * @return Returns a OK if the command is succesfully processed, otherwise returns a serverError.
+     */
     @GET
     @Path("{id}/{command}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -32,10 +42,12 @@ public class ContainerCommandController {
         Channel rabbitChannel = null;
         try {
             if (dbHandler.isCommandValid(command)) {
+                //Starting up all the required connections
                 dbConn = dbConnector.getConnection();
                 rabbitConn = rabbitConnector.getConnection();
                 rabbitChannel = rabbitConnector.getChannel(rabbitConn);
 
+                //Handling the command
                 String queueId = dbHandler.containerQueueID(containerId, dbConn);
                 rabbitHandler.processCommand(containerId, queueId, command, rabbitChannel, null, null, null);
                 dbHandler.updateContainer(containerId, command, dbConn, false);
@@ -48,6 +60,7 @@ public class ContainerCommandController {
             return Response.serverError().build();
         } finally {
             try {
+                //Close all connections if open
                 dbConnector.closeConnection(dbConn);
                 rabbitConnector.closeConnection(rabbitConn, rabbitChannel);
             } catch (Exception e) {
@@ -56,6 +69,12 @@ public class ContainerCommandController {
         }
     }
 
+    /**
+     * Method used to send a delete command to a specific container
+     *
+     * @param containerId The id of the container you would like to issue a command to.
+     * @return Returns a OK if the command is succesfully processed, otherwise returns a serverError.
+     */
     @GET
     @Path("{id}/delete")
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,10 +83,12 @@ public class ContainerCommandController {
         com.rabbitmq.client.Connection rabbitConn = null;
         Channel rabbitChannel = null;
         try {
+            //Starting up all the required connections
             dbConn = dbConnector.getConnection();
             rabbitConn = rabbitConnector.getConnection();
             rabbitChannel = rabbitConnector.getChannel(rabbitConn);
 
+            //Handling the command
             String queueId = dbHandler.containerQueueID(containerId, dbConn);
             rabbitHandler.processCommand(containerId, queueId, "delete", rabbitChannel, null, null, null);
             dbHandler.deleteContainer(containerId, dbConn);
@@ -78,6 +99,7 @@ public class ContainerCommandController {
             return Response.serverError().build();
         } finally {
             try {
+                //Close all connections if open
                 dbConnector.closeConnection(dbConn);
                 rabbitConnector.closeConnection(rabbitConn, rabbitChannel);
             } catch (Exception e) {

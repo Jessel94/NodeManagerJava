@@ -3,6 +3,9 @@ package hro.ictlab.nodemanager.connectors;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * This class is used to setup and close all connections for the database.
+ */
 public class DbConnector {
 
     // JDBC driver name and database URL
@@ -14,6 +17,9 @@ public class DbConnector {
     private static final String PASS = System.getenv("MYSQL_PASS");
 
 
+    /**
+     * @return Returns a connection for the database
+     */
     public Connection getConnection() throws Exception {
         //Register JDBC driver
         Class.forName(JDBC_DRIVER);
@@ -22,6 +28,9 @@ public class DbConnector {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
+    /**
+     * Close the database connection if it has been initialized
+     */
     public void closeConnection(Connection conn) throws Exception {
         if (conn != null) {
             conn.close();

@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.controllers.Node;
+package hro.ictlab.nodemanager.controllers.node;
 
 import hro.ictlab.nodemanager.connectors.DbConnector;
 import hro.ictlab.nodemanager.database.DbHandler;
@@ -14,6 +14,9 @@ import javax.ws.rs.core.Response;
 import java.sql.Connection;
 import java.util.ArrayList;
 
+/**
+ * Class that is used to handle the hearthbeat requests
+ */
 @Path("/nodes/")
 public class NodeHearthBeatController {
 
@@ -21,13 +24,21 @@ public class NodeHearthBeatController {
     private final HearthBeatHandler hearthBeatHandler = new HearthBeatHandler();
     private final DbConnector dbConnector = new DbConnector();
 
+    /**
+     * Method used to update all containers by requesting the hearthbeat of all known nodes
+     *
+     * @return Returns a OK if the command is succesfully processed, otherwise returns a serverError.
+     */
     @GET
     @Path("/hb/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getNodeHb() throws Exception {
         Connection conn = null;
         try {
+            //Starting up all the required connections
             conn = dbConnector.getConnection();
+
+            //For each nodes in the list of nodes it handles the hearthBeat
             ArrayList<Node> nodes = dbHandler.nodeList(conn);
             for (Node node : nodes) {
                 String ip = node.getName();
@@ -44,6 +55,7 @@ public class NodeHearthBeatController {
             return Response.serverError().build();
         } finally {
             try {
+                //Close all connections if open
                 dbConnector.closeConnection(conn);
             } catch (Exception e) {
                 e.printStackTrace();

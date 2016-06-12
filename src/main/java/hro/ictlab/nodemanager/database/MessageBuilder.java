@@ -2,6 +2,7 @@ package hro.ictlab.nodemanager.database;
 
 class MessageBuilder {
 
+
     static String generateMessage(String command) {
         if (command.equals("start")) {
             return "Starting";

@@ -2,6 +2,9 @@ package hro.ictlab.nodemanager.models;
 
 import java.sql.Timestamp;
 
+/**
+ * Model that is used for Node data
+ */
 public class Node {
     private int id;
     private String name;
