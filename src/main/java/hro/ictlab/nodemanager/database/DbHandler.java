@@ -73,6 +73,12 @@ public class DbHandler {
         dataHandler.executeUpdate(statement, sql);
     }
 
+    public void updateContainerCrash(String containerId, Connection conn) throws Exception {
+        Statement statement = dataHandler.getStatement(conn);
+        String sql = dataHandler.containerStatusCrash(containerId);
+        dataHandler.executeUpdate(statement, sql);
+    }
+
     public void updateContainerList(ArrayList<DockerData> dockerDatas, Connection conn) throws Exception {
         for (DockerData dockerData : dockerDatas) {
             String containerId = dockerData.getContainerID();
@@ -104,6 +110,16 @@ public class DbHandler {
 
     public void deleteContainer(String containerId, Connection conn) throws Exception {
         PreparedStatement ps = dataHandler.deleteContainer(conn, containerId);
+        dataHandler.executeStatement(ps);
+    }
+
+    public void deleteNode(String nodeIp, Connection conn) throws Exception {
+        PreparedStatement ps = dataHandler.deleteNode(conn, nodeIp);
+        dataHandler.executeStatement(ps);
+    }
+
+    public void deleteQueue(String queueId, Connection conn) throws Exception {
+        PreparedStatement ps = dataHandler.deleteQueue(conn, queueId);
         dataHandler.executeStatement(ps);
     }
 

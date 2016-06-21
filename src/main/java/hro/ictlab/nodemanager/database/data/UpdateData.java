@@ -9,5 +9,9 @@ class UpdateData {
     String nodeStatus(String queueId) {
         return ("UPDATE Nodes SET lastchecked = NULL WHERE queueid = " + queueId);
     }
+
+    String containerStatusCrash(String queueId) {
+        return ("UPDATE Containers SET state = 'Node Crashed' WHERE queueid = " + queueId);
+    }
 }
 

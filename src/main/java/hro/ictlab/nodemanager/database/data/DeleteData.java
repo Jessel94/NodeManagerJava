@@ -10,4 +10,16 @@ class DeleteData {
                 "DELETE FROM Containers WHERE id = " + containerId
         );
     }
+
+    PreparedStatement deleteNode(Connection connection, String containerId) throws Exception {
+        return connection.prepareStatement(
+                "DELETE FROM Nodes WHERE name = '" + containerId + "'"
+        );
+    }
+
+    PreparedStatement deleteQueue(Connection connection, String queueId) throws Exception {
+        return connection.prepareStatement(
+                "DELETE FROM Queues WHERE id = " + queueId
+        );
+    }
 }

@@ -43,11 +43,16 @@ public class NodeHearthBeatController {
             for (Node node : nodes) {
                 String ip = node.getName();
                 String queueId = String.valueOf(node.getQueueId());
+                try {
+                    ArrayList<DockerData> outputData = hearthBeatHandler.handleHearthBeat(ip);
 
-                ArrayList<DockerData> outputData = hearthBeatHandler.handleHearthBeat(ip);
-
-                dbHandler.updateContainerList(outputData, conn);
-                dbHandler.updateNode(queueId, conn);
+                    dbHandler.updateContainerList(outputData, conn);
+                    dbHandler.updateNode(queueId, conn);
+                } catch (Exception e) {
+                    dbHandler.deleteNode(ip, conn);
+                    dbHandler.deleteQueue(queueId, conn);
+                    dbHandler.updateContainerCrash(queueId, conn);
+                }
             }
             return Response.ok().build();
         } catch (Exception e) {

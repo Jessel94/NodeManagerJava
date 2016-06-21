@@ -68,4 +68,15 @@ public class DataHandler {
         return deleteData.deleteContainer(connection, containerId);
     }
 
+    public PreparedStatement deleteNode(Connection connection, String nodeIp) throws Exception {
+        return deleteData.deleteNode(connection, nodeIp);
+    }
+
+    public PreparedStatement deleteQueue(Connection connection, String queueId) throws Exception {
+        return deleteData.deleteQueue(connection, queueId);
+    }
+
+    public String containerStatusCrash(String queueId) {
+        return updateData.containerStatusCrash(queueId);
+    }
 }
