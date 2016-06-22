@@ -78,7 +78,7 @@ public class ContainerCommandController {
     @GET
     @Path("{id}/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response issueContainerCommand(@PathParam("id") String containerId) throws Exception {
+    public Response issueDeleteContainer(@PathParam("id") String containerId) throws Exception {
         Connection dbConn = null;
         com.rabbitmq.client.Connection rabbitConn = null;
         Channel rabbitChannel = null;
@@ -92,6 +92,76 @@ public class ContainerCommandController {
             String queueId = dbHandler.containerQueueID(containerId, dbConn);
             rabbitHandler.processCommand(containerId, queueId, "delete", rabbitChannel, null, null, null);
             dbHandler.deleteContainer(containerId, dbConn);
+
+            return Response.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError().build();
+        } finally {
+            try {
+                //Close all connections if open
+                dbConnector.closeConnection(dbConn);
+                rabbitConnector.closeConnection(rabbitConn, rabbitChannel);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @GET
+    @Path("{id}/move/{nodeId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response issueMoveContainer(@PathParam("id") String containerId, @PathParam("nodeId") String nodeId) throws Exception {
+        Connection dbConn = null;
+        com.rabbitmq.client.Connection rabbitConn = null;
+        Channel rabbitChannel = null;
+        try {
+            //Starting up all the required connections
+            dbConn = dbConnector.getConnection();
+            rabbitConn = rabbitConnector.getConnection();
+            rabbitChannel = rabbitConnector.getChannel(rabbitConn);
+
+            //Handling the command
+            String queueIdNew = dbHandler.nodeQueueID(nodeId, dbConn);
+            String newContainerId = dbHandler.newContainer(dbHandler.containerName(containerId, dbConn), queueIdNew, dbConn);
+            rabbitHandler.processCommand(newContainerId, queueIdNew, "create", rabbitChannel, "", "", "");
+
+            String queueIdOld = dbHandler.containerQueueID(containerId, dbConn);
+            rabbitHandler.processCommand(containerId, queueIdOld, "delete", rabbitChannel, null, null, null);
+            dbHandler.deleteContainer(containerId, dbConn);
+
+            return Response.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError().build();
+        } finally {
+            try {
+                //Close all connections if open
+                dbConnector.closeConnection(dbConn);
+                rabbitConnector.closeConnection(rabbitConn, rabbitChannel);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @GET
+    @Path("{id}/scale/{nodeId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response issueScaleContainer(@PathParam("id") String containerId, @PathParam("nodeId") String nodeId) throws Exception {
+        Connection dbConn = null;
+        com.rabbitmq.client.Connection rabbitConn = null;
+        Channel rabbitChannel = null;
+        try {
+            //Starting up all the required connections
+            dbConn = dbConnector.getConnection();
+            rabbitConn = rabbitConnector.getConnection();
+            rabbitChannel = rabbitConnector.getChannel(rabbitConn);
+
+            //Handling the command
+            String queueId = dbHandler.containerQueueID(containerId, dbConn);
+            String newContainerId = dbHandler.newContainer(dbHandler.containerName(containerId, dbConn), queueId, dbConn);
+            rabbitHandler.processCommand(newContainerId, queueId, "create", rabbitChannel, "", "", "");
 
             return Response.ok().build();
         } catch (Exception e) {
