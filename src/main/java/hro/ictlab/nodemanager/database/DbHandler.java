@@ -45,6 +45,12 @@ public class DbHandler {
         return Integer.toString(dataFormatter.containerData(rs).getQueueId());
     }
 
+    public String containerName(String containerId, Connection conn) throws Exception {
+        PreparedStatement ps = dataHandler.getContainers(conn, containerId);
+        ResultSet rs = dataHandler.getResultSet(ps);
+        return dataFormatter.containerData(rs).getName();
+    }
+
     public String nodeQueueID(String nodeIp, Connection conn) throws Exception {
         PreparedStatement ps = dataHandler.getNodes(conn, null, nodeIp);
         ResultSet rs = dataHandler.getResultSet(ps);
