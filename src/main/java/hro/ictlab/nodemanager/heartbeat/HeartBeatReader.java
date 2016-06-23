@@ -1,11 +1,11 @@
-package hro.ictlab.nodemanager.hearthbeat;
+package hro.ictlab.nodemanager.heartbeat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class HearthBeatReader {
+class HeartBeatReader {
 
     String readHeartBeat(String ip) throws Exception {
         HttpURLConnection conn = (HttpURLConnection) new URL("http://" + ip + ":53452").openConnection();

@@ -4,6 +4,7 @@ import com.rabbitmq.client.Channel;
 import hro.ictlab.nodemanager.connectors.DbConnector;
 import hro.ictlab.nodemanager.connectors.RabbitConnector;
 import hro.ictlab.nodemanager.database.DbHandler;
+import hro.ictlab.nodemanager.models.Queue;
 import hro.ictlab.nodemanager.rabbitmq.RabbitHandler;
 
 import javax.ws.rs.GET;
@@ -123,8 +124,10 @@ public class ContainerCommandController {
 
             //Handling the command
             String queueIdNew = dbHandler.nodeQueueID(nodeId, dbConn);
-            String newContainerId = dbHandler.newContainer(dbHandler.containerName(containerId, dbConn), queueIdNew, dbConn);
-            rabbitHandler.processCommand(newContainerId, queueIdNew, "create", rabbitChannel, "", "", "");
+            Queue queueData = dbHandler.queueData(queueIdNew, dbConn);
+
+            dbHandler.newContainer(dbHandler.containerName(containerId, dbConn), queueIdNew, dbConn);
+            rabbitHandler.processExport(containerId, queueIdNew, "export", rabbitChannel, queueData.getQueueName(), queueData.getQueuePass());
 
             String queueIdOld = dbHandler.containerQueueID(containerId, dbConn);
             rabbitHandler.processCommand(containerId, queueIdOld, "delete", rabbitChannel, null, null, null);
@@ -159,9 +162,11 @@ public class ContainerCommandController {
             rabbitChannel = rabbitConnector.getChannel(rabbitConn);
 
             //Handling the command
-            String queueId = dbHandler.containerQueueID(containerId, dbConn);
-            String newContainerId = dbHandler.newContainer(dbHandler.containerName(containerId, dbConn), queueId, dbConn);
-            rabbitHandler.processCommand(newContainerId, queueId, "create", rabbitChannel, "", "", "");
+            String queueIdNew = dbHandler.nodeQueueID(nodeId, dbConn);
+            Queue queueData = dbHandler.queueData(queueIdNew, dbConn);
+
+            dbHandler.newContainer(dbHandler.containerName(containerId, dbConn), queueIdNew, dbConn);
+            rabbitHandler.processExport(containerId, queueIdNew, "export", rabbitChannel, queueData.getQueueName(), queueData.getQueuePass());
 
             return Response.ok().build();
         } catch (Exception e) {

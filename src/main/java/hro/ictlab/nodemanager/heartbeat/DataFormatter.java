@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.hearthbeat;
+package hro.ictlab.nodemanager.heartbeat;
 
 import hro.ictlab.nodemanager.models.DockerData;
 import org.json.JSONArray;

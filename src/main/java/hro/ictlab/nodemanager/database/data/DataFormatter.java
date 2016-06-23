@@ -45,6 +45,15 @@ public class DataFormatter {
         return container;
     }
 
+    private Queue fillQueue(ResultSet rs) throws Exception {
+        Queue queue = new Queue();
+        queue.setId(rs.getInt("id"));
+        queue.setHostName(rs.getString("hostname"));
+        queue.setQueueName(rs.getString("queuename"));
+        queue.setQueuePass(rs.getString("queuepass"));
+        return queue;
+    }
+
     private Node fillNode(ResultSet rs) throws Exception {
         Node node = new Node();
         node.setId(rs.getInt("id"));
@@ -59,6 +68,16 @@ public class DataFormatter {
             Container container = fillContainer(rs);
             rs.close();
             return container;
+        } else {
+            return null;
+        }
+    }
+
+    public Queue queueData(ResultSet rs) throws Exception {
+        if (rs.next()) {
+            Queue queue = fillQueue(rs);
+            rs.close();
+            return queue;
         } else {
             return null;
         }

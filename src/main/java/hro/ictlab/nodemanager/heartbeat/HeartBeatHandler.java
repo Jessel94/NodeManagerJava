@@ -1,4 +1,4 @@
-package hro.ictlab.nodemanager.hearthbeat;
+package hro.ictlab.nodemanager.heartbeat;
 
 import hro.ictlab.nodemanager.models.DockerData;
 import org.json.JSONArray;
@@ -9,10 +9,10 @@ import java.util.ArrayList;
 /**
  * Class that is used to process the hearthbeat request
  */
-public class HearthBeatHandler {
+public class HeartBeatHandler {
 
     private final DataFormatter dataFormatter = new DataFormatter();
-    private final HearthBeatReader hearthBeatReader = new HearthBeatReader();
+    private final HeartBeatReader hearthBeatReader = new HeartBeatReader();
 
     /**
      * Method that is used to handle the GET requests for a list of containers

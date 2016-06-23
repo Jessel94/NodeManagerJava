@@ -27,7 +27,12 @@ class MessageBuilder {
             mainObjArray.put(actionId(id));
             mainObjArray.put(actionConnect(rabbitMQ(id, userName, passWord)));
         }
+        return mainObjArray.toString();
+    }
 
+    String buildExport(String containerId, String queueId, String message, String userName, String passWord){
+        JSONArray mainObjArray = new JSONArray();
+        mainObjArray.put(actionExport(rabbitMQ(queueId, userName, passWord), containerId));
         return mainObjArray.toString();
     }
 
@@ -58,8 +63,8 @@ class MessageBuilder {
         jo2.put("restart", jo1);
 
         return jo2;
-    }
 
+}
     private JSONObject delete(String containerId) {
         JSONObject jo1 = new JSONObject();
         jo1.put("container", containerId);
@@ -113,6 +118,15 @@ class MessageBuilder {
         JSONObject mainObj = new JSONObject();
         mainObj.put("amqp", jo);
         mainObj.put("action", "connect");
+
+        return mainObj;
+    }
+
+    private JSONObject actionExport(JSONObject jo, String containerId) {
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("action", "export");
+        mainObj.put("container", containerId);
+        mainObj.put("amqp", jo);
 
         return mainObj;
     }

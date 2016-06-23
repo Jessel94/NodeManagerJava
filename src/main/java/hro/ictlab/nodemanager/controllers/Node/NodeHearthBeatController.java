@@ -2,7 +2,7 @@ package hro.ictlab.nodemanager.controllers.node;
 
 import hro.ictlab.nodemanager.connectors.DbConnector;
 import hro.ictlab.nodemanager.database.DbHandler;
-import hro.ictlab.nodemanager.hearthbeat.HearthBeatHandler;
+import hro.ictlab.nodemanager.heartbeat.HeartBeatHandler;
 import hro.ictlab.nodemanager.models.DockerData;
 import hro.ictlab.nodemanager.models.Node;
 
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class NodeHearthBeatController {
 
     private final DbHandler dbHandler = new DbHandler();
-    private final HearthBeatHandler hearthBeatHandler = new HearthBeatHandler();
+    private final HeartBeatHandler hearthBeatHandler = new HeartBeatHandler();
     private final DbConnector dbConnector = new DbConnector();
 
     /**

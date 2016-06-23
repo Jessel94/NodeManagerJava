@@ -25,6 +25,11 @@ class GetData {
         return ps;
     }
 
+    PreparedStatement getQueues(Connection connection, String queueId) throws Exception {
+        PreparedStatement ps = connection.prepareStatement("SELECT id, hostname, queuename, queuepass FROM Queues Where id = " + queueId);
+        return ps;
+    }
+
     PreparedStatement getNodes(Connection connection, String nodeId, String nodeIp) throws Exception {
         PreparedStatement ps;
         if (nodeId != null) {

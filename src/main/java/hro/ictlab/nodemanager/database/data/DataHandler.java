@@ -22,6 +22,10 @@ public class DataHandler {
         return getData.getNodes(connection, nodeId, nodeIp);
     }
 
+    public PreparedStatement getQueue(Connection connection, String queueId) throws Exception {
+        return getData.getQueues(connection, queueId);
+    }
+
     public ResultSet getResultSet(PreparedStatement ps) throws Exception {
         return ps.executeQuery();
     }

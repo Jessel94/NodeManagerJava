@@ -26,6 +26,15 @@ public class RabbitHandler {
     /**
      * Method processes and sends the command to the specified Queue
      */
+    public void processExport(String containerID, String queueId, String message, Channel channel, String queuename, String queuepass) throws Exception {
+        String containerId = "container" + containerID;
+        String messageArray = messageBuilder.buildExport(containerId, queueId, message, queuename, queuepass);
+        send.sendMessage(queueId, messageArray, channel);
+    }
+
+    /**
+     * Method processes and sends the command to the specified Queue
+     */
     public String requestQueue(int queueID, String userName, String passWord, Channel channel) throws Exception {
         String result = queue.newQueue(channel, queueID);
         return messageBuilder.buildMessage(result, "setid", userName, passWord, null, null, null);

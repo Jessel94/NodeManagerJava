@@ -2,8 +2,10 @@ package hro.ictlab.nodemanager.database;
 
 import hro.ictlab.nodemanager.database.data.DataFormatter;
 import hro.ictlab.nodemanager.database.data.DataHandler;
+import hro.ictlab.nodemanager.models.Container;
 import hro.ictlab.nodemanager.models.DockerData;
 import hro.ictlab.nodemanager.models.Node;
+import hro.ictlab.nodemanager.models.Queue;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,6 +45,12 @@ public class DbHandler {
         PreparedStatement ps = dataHandler.getContainers(conn, containerId);
         ResultSet rs = dataHandler.getResultSet(ps);
         return Integer.toString(dataFormatter.containerData(rs).getQueueId());
+    }
+
+    public Queue queueData(String queueId, Connection conn) throws Exception {
+        PreparedStatement ps = dataHandler.getQueue(conn, queueId);
+        ResultSet rs = dataHandler.getResultSet(ps);
+        return dataFormatter.queueData(rs);
     }
 
     public String containerName(String containerId, Connection conn) throws Exception {
